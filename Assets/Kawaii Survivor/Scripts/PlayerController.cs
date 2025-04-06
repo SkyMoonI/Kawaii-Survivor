@@ -1,22 +1,23 @@
 using UnityEngine;
+using Joystick;
 
 [RequireComponent(typeof(Rigidbody2D))]
 public class PlayerController : MonoBehaviour
 {
+    [Header("Elements")]
     private Rigidbody2D m_rigidbody2D;
+    [SerializeField] private MobileJoystick m_moveJoystick;
+
+    [Header("Settings")]
+    [SerializeField] private float m_moveSpeed;
+
     void Awake()
     {
         m_rigidbody2D = GetComponent<Rigidbody2D>();
     }
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+
+    void FixedUpdate()
     {
-
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
+        m_rigidbody2D.linearVelocity = m_moveJoystick.GetMoveVector() * m_moveSpeed * Time.fixedDeltaTime;
     }
 }

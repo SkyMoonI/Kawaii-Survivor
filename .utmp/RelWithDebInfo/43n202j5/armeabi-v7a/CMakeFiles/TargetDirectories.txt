@@ -1,0 +1,8 @@
+D:/unity/Udemy Unity 2D Game - Kawaii Survivor/Kawaii-Survivor/.utmp/RelWithDebInfo/43n202j5/armeabi-v7a/CMakeFiles/edit_cache.dir
+D:/unity/Udemy Unity 2D Game - Kawaii Survivor/Kawaii-Survivor/.utmp/RelWithDebInfo/43n202j5/armeabi-v7a/CMakeFiles/rebuild_cache.dir
+D:/unity/Udemy Unity 2D Game - Kawaii Survivor/Kawaii-Survivor/.utmp/RelWithDebInfo/43n202j5/armeabi-v7a/GameActivity/CMakeFiles/game.dir
+D:/unity/Udemy Unity 2D Game - Kawaii Survivor/Kawaii-Survivor/.utmp/RelWithDebInfo/43n202j5/armeabi-v7a/GameActivity/CMakeFiles/edit_cache.dir
+D:/unity/Udemy Unity 2D Game - Kawaii Survivor/Kawaii-Survivor/.utmp/RelWithDebInfo/43n202j5/armeabi-v7a/GameActivity/CMakeFiles/rebuild_cache.dir
+D:/unity/Udemy Unity 2D Game - Kawaii Survivor/Kawaii-Survivor/.utmp/RelWithDebInfo/43n202j5/armeabi-v7a/FramePacing/CMakeFiles/swappywrapper.dir
+D:/unity/Udemy Unity 2D Game - Kawaii Survivor/Kawaii-Survivor/.utmp/RelWithDebInfo/43n202j5/armeabi-v7a/FramePacing/CMakeFiles/edit_cache.dir
+D:/unity/Udemy Unity 2D Game - Kawaii Survivor/Kawaii-Survivor/.utmp/RelWithDebInfo/43n202j5/armeabi-v7a/FramePacing/CMakeFiles/rebuild_cache.dir

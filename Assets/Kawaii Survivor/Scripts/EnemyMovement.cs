@@ -1,0 +1,32 @@
+using UnityEngine;
+
+public class EnemyMovement : MonoBehaviour
+{
+    [Header("Elements")]
+    private Player m_player;
+
+    [Header("Settings")]
+    [SerializeField] private int m_moveSpeed;
+
+    void Awake()
+    {
+        m_player = FindFirstObjectByType<Player>();
+
+        if (m_player == null)
+        {
+            Debug.LogWarning("No Player Found. Auto-destroying...");
+            Destroy(gameObject);
+        }
+    }
+
+    void Update()
+    {
+        Vector2 directionVector = m_player.transform.position - transform.position; // a vector from enemy to player
+        Vector2 normalizedDirectionVector = directionVector.normalized; // normalize it to get raw vector
+
+        // add position the raw vector with move speed to get target position
+        Vector2 targetPosition = (Vector2)transform.position + normalizedDirectionVector * m_moveSpeed * Time.deltaTime;
+
+        transform.position = targetPosition; // every frame we assign the new position
+    }
+}

@@ -20,6 +20,12 @@ public class EnemyMovement : MonoBehaviour
     [Header("Effects")]
     [SerializeField] private ParticleSystem m_enemyDeathEffectPrefab; // prefab to spawn when enemy dies
 
+    [Header("Attack Settings")]
+    [SerializeField] private float m_attackFrequency; // attack frequency in seconds
+    private float m_attackDelay; // attack duration in seconds
+    private float m_attackTime; // attack range in units
+    [SerializeField] private float m_attackDamage = 10f; // damage dealt to the player
+
     [Header("DEBUG")]
     [SerializeField] private bool m_isGizmosEnabled;
 
@@ -44,6 +50,7 @@ public class EnemyMovement : MonoBehaviour
         .setLoopPingPong(m_spawnIndicatorLoopCount)
         .setOnComplete(SpawnSequenceCompleted);
 
+        m_attackTime = 1f / m_attackFrequency; // calculate the attack time based on the frequency per second
     }
 
     void Update()
@@ -54,7 +61,15 @@ public class EnemyMovement : MonoBehaviour
         }
 
         FollowPlayer();
-        TryAttack();
+
+        if (m_attackDelay >= m_attackTime)
+        {
+            TryAttack();
+        }
+        else
+        {
+            WaitForAttack();
+        }
     }
 
     private void SpawnSequenceCompleted()
@@ -82,11 +97,25 @@ public class EnemyMovement : MonoBehaviour
 
         if (distanceToPlayer < m_playerDetectionDistance)
         {
-            Debug.Log("Enemy is attacking the player!");
-
-            PlayDeathEffect(); // play the death effect
-            Destroy(gameObject); // destroy the enemy when it is close to player
+            Attack();
         }
+    }
+    private void Attack()
+    {
+        Debug.Log("Dealing damage to player: " + m_attackDamage); // deal damage to player
+
+        m_attackDelay = 0f; // reset the attack delay
+    }
+
+    private void WaitForAttack()
+    {
+        m_attackDelay += Time.deltaTime; // increase the attack delay
+    }
+
+    private void Die()
+    {
+        PlayDeathEffect(); // play the death effect
+        Destroy(gameObject); // destroy the enemy when it is close to player
     }
 
     private void PlayDeathEffect()

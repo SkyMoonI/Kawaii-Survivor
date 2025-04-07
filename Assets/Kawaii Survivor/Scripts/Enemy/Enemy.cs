@@ -1,9 +1,11 @@
 using UnityEngine;
 
-public class EnemyMovement : MonoBehaviour
+[RequireComponent(typeof(EnemyMovement))]
+public class Enemy : MonoBehaviour
 {
     [Header("Elements")]
     private Player m_player;
+    private EnemyMovement m_enemyMovement;
 
     [Header("Spawn Related")]
     [SerializeField] private SpriteRenderer m_characterSpriteRenderer; // enemy sprite renderer
@@ -12,9 +14,6 @@ public class EnemyMovement : MonoBehaviour
     [SerializeField] private float m_spawnIndicatorDuration = 0.3f; // duration of the spawn indicator
     [SerializeField] private int m_spawnIndicatorLoopCount = 4; // delay of the spawn indicator
     private bool m_hasSpawned; // flag to check if the enemy has spawned
-
-    [Header("Settings")]
-    [SerializeField] private float m_moveSpeed;
     [SerializeField] private float m_playerDetectionDistance; // minimum distance to player
 
     [Header("Effects")]
@@ -23,8 +22,9 @@ public class EnemyMovement : MonoBehaviour
     [Header("Attack Settings")]
     [SerializeField] private float m_attackFrequency; // attack frequency in seconds
     private float m_attackDelay; // attack duration in seconds
-    private float m_attackTime; // attack range in units
+    private float m_attackTimer; // attack range in units
     [SerializeField] private float m_attackDamage = 10f; // damage dealt to the player
+
 
     [Header("DEBUG")]
     [SerializeField] private bool m_isGizmosEnabled;
@@ -32,6 +32,11 @@ public class EnemyMovement : MonoBehaviour
     void Awake()
     {
         m_player = FindFirstObjectByType<Player>();
+
+        m_enemyMovement = GetComponent<EnemyMovement>();
+        m_enemyMovement.enabled = false; // disable the enemy movement script until the spawn sequence is completed
+
+        m_attackDelay = 1f / m_attackFrequency; // calculate the attack time based on the frequency per second
 
         if (m_player == null)
         {
@@ -42,27 +47,14 @@ public class EnemyMovement : MonoBehaviour
 
     void Start()
     {
-        m_characterSpriteRenderer.enabled = false; // hide the character renderer
-        m_spawnIndicatorRenderer.enabled = true; // show the spawn indicator renderer
-
-        Vector3 targetScale = m_spawnIndicatorRenderer.transform.localScale * m_spawnIndicatorDuration; // get the target scale of the spawn indicator
-        LeanTween.scale(m_spawnIndicatorRenderer.gameObject, targetScale, m_spawnIndicatorDuration)
-        .setLoopPingPong(m_spawnIndicatorLoopCount)
-        .setOnComplete(SpawnSequenceCompleted);
-
-        m_attackTime = 1f / m_attackFrequency; // calculate the attack time based on the frequency per second
+        StartSpawnSequence();
     }
 
     void Update()
     {
-        if (m_hasSpawned == false) // check if the enemy has spawned
-        {
-            return; // if not, do nothing
-        }
+        if (!m_hasSpawned) return;
 
-        FollowPlayer();
-
-        if (m_attackDelay >= m_attackTime)
+        if (m_attackTimer >= m_attackDelay)
         {
             TryAttack();
         }
@@ -72,23 +64,30 @@ public class EnemyMovement : MonoBehaviour
         }
     }
 
-    private void SpawnSequenceCompleted()
+    private void SetRendererVisiblity(bool isVisible)
     {
-        m_characterSpriteRenderer.enabled = true; // show the character renderer
-        m_spawnIndicatorRenderer.enabled = false; // hide the spawn indicator renderer
-
-        m_hasSpawned = true; // set the spawn flag to true
+        m_characterSpriteRenderer.enabled = isVisible; // hide the character renderer
+        m_spawnIndicatorRenderer.enabled = !isVisible; // show the spawn indicator renderer
     }
 
-    private void FollowPlayer()
+    private void StartSpawnSequence()
     {
-        Vector2 directionVector = m_player.transform.position - transform.position; // a vector from enemy to player
-        Vector2 normalizedDirectionVector = directionVector.normalized; // normalize it to get raw vector
+        SetRendererVisiblity(false); // hide the character renderer
 
-        // add position the raw vector with move speed to get target position
-        Vector2 targetPosition = (Vector2)transform.position + normalizedDirectionVector * m_moveSpeed * Time.deltaTime;
+        Vector3 targetScale = m_spawnIndicatorRenderer.transform.localScale * m_spawnIndicatorDuration; // get the target scale of the spawn indicator
+        LeanTween.scale(m_spawnIndicatorRenderer.gameObject, targetScale, m_spawnIndicatorDuration)
+        .setLoopPingPong(m_spawnIndicatorLoopCount)
+        .setOnComplete(SpawnSequenceCompleted);
+    }
 
-        transform.position = targetPosition; // every frame we assign the new position
+    private void SpawnSequenceCompleted()
+    {
+        SetRendererVisiblity(true); // show the character renderer
+
+        m_hasSpawned = true; // set the spawn flag to true
+
+        m_enemyMovement.enabled = true; // enable the enemy movement script
+        m_enemyMovement.SetPlayer(m_player); // set the player reference in the enemy movement script
     }
 
     private void TryAttack()
@@ -102,14 +101,14 @@ public class EnemyMovement : MonoBehaviour
     }
     private void Attack()
     {
-        Debug.Log("Dealing damage to player: " + m_attackDamage); // deal damage to player
+        m_player.TakeDamage(m_attackDamage); // deal damage to the player
 
-        m_attackDelay = 0f; // reset the attack delay
+        m_attackTimer = 0f; // reset the attack delay
     }
 
     private void WaitForAttack()
     {
-        m_attackDelay += Time.deltaTime; // increase the attack delay
+        m_attackTimer += Time.deltaTime; // increase the attack delay
     }
 
     private void Die()
@@ -135,5 +134,4 @@ public class EnemyMovement : MonoBehaviour
 
         Gizmos.DrawWireSphere(transform.position, m_playerDetectionDistance); // Draw a wire sphere at the enemy's position with the detection distance
     }
-
 }

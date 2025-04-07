@@ -13,9 +13,11 @@ namespace Joystick
         private bool m_canControl;             // Flag to determine if the joystick is currently active and responding to input.
         [SerializeField] private float m_moveFactor = 0.1f; // A multiplier to control the sensitivity of the joystick's movement.
         private Vector3 m_move;                  // Stores the calculated movement vector based on the joystick's position.
+        private float canvasScale; // Stores the scale of the canvas to ensure the joystick behaves correctly across different screen sizes.
 
         void Start()
         {
+            canvasScale = GetComponentInParent<Canvas>().GetComponent<RectTransform>().localScale.x; //gets the scale of the canvas to adjust the joystick's behavior.
             HideJoystick(); // Initially hides the joystick when the scene starts.
         }
 
@@ -74,8 +76,6 @@ namespace Joystick
             // It is like an arrow that from center of the joystick to the current mouse position
             Vector3 direction = currentPosition - m_clickedPosition; // Calculates the vector from the start point to the current point.
 
-            float canvasScale = GetComponentInParent<Canvas>().GetComponent<RectTransform>().localScale.x; //gets the scale of the canvas
-
             float moveMagnitude = direction.magnitude * m_moveFactor * canvasScale; // Calculates how far the joystick has been moved, taking into account the moveFactor and canvas scale.
 
             float absoluteWidth = m_joystickOutline.rect.width / 2; //gets the radius of the joystick outline
@@ -102,7 +102,6 @@ namespace Joystick
         /// <returns>The normalized movement vector.</returns>
         public Vector3 GetMoveVector()
         {
-            float canvasScale = GetComponentInParent<Canvas>().GetComponent<RectTransform>().localScale.x;
             return m_move / canvasScale; // Returns the movement vector, adjusted for canvas scale.
         }
     }

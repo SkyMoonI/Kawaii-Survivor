@@ -36,9 +36,4 @@ public class HealthBar : MonoBehaviour
         }
     }
 
-    public void SetMaxHealth(float maxHealth)
-    {
-        m_slider.maxValue = maxHealth; // Set the maximum value of the slider
-    }
-
 }

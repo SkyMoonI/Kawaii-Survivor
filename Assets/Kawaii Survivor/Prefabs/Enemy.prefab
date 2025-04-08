@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 778992471286206986}
   - component: {fileID: 5448027713555652653}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Spawn Indicator
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -98,7 +98,8 @@ GameObject:
   - component: {fileID: 1388491143461749683}
   - component: {fileID: 7875411677181593358}
   - component: {fileID: 7090085054344921326}
-  m_Layer: 0
+  - component: {fileID: 8632304516876679490}
+  m_Layer: 6
   m_Name: Enemy
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -158,6 +159,42 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_moveSpeed: 1
+--- !u!58 &8632304516876679490
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4156522768238170358}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: 0, y: 0.53}
+  m_Radius: 0.4
 --- !u!1 &5044836478952567108
 GameObject:
   m_ObjectHideFlags: 0
@@ -169,7 +206,7 @@ GameObject:
   - component: {fileID: 1454179303005037695}
   - component: {fileID: 5468911076336684492}
   - component: {fileID: 1996658710505792849}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Particle System
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5059,7 +5096,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1183420939714017152}
   - component: {fileID: 2165013305454974336}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Enemy Renderer
   m_TagString: Untagged
   m_Icon: {fileID: 0}

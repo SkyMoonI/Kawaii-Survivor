@@ -26,8 +26,6 @@ public class PlayerHealth : MonoBehaviour
     {
         float realDamage = Mathf.Clamp(damage, 0, m_currentHealth); // Ensure damage doesn't exceed current health
 
-        Debug.Log($"Player took {realDamage} damage.");
-
         m_currentHealth -= realDamage; // Reduce current health by damage taken
 
         m_healthBar.UpdateHealth(m_currentHealth, m_maxHealth); // Update the health bar

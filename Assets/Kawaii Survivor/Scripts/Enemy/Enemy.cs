@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 [RequireComponent(typeof(EnemyMovement))]
@@ -25,6 +27,11 @@ public class Enemy : MonoBehaviour
     private float m_attackTimer; // attack range in units
     [SerializeField] private float m_attackDamage = 10f; // damage dealt to the player
 
+    [Header("Health")]
+    [SerializeField] private float m_maxHealth;
+    [SerializeField] private float m_currentHealth;
+    private TMP_Text m_healthText; // health text to display the current health
+
 
     [Header("DEBUG")]
     [SerializeField] private bool m_isGizmosEnabled;
@@ -47,6 +54,10 @@ public class Enemy : MonoBehaviour
 
     void Start()
     {
+        m_currentHealth = m_maxHealth; // Set the initial health to max health
+        m_healthText = GetComponentInChildren<TMP_Text>(); // Find the health text in the scene
+        m_healthText.text = m_currentHealth.ToString(); // Set the initial health text
+
         StartSpawnSequence();
     }
 
@@ -111,16 +122,30 @@ public class Enemy : MonoBehaviour
         m_attackTimer += Time.deltaTime; // increase the attack delay
     }
 
-    private void Die()
-    {
-        PlayDeathEffect(); // play the death effect
-        Destroy(gameObject); // destroy the enemy when it is close to player
-    }
-
     private void PlayDeathEffect()
     {
         m_enemyDeathEffectPrefab.transform.SetParent(null); // detach the effect from the enemy
         m_enemyDeathEffectPrefab.Play(); // play the death effect at the enemy's position
+    }
+
+    public void TakeDamage(float damage)
+    {
+        float realDamage = Mathf.Clamp(damage, 0, m_currentHealth); // Ensure damage doesn't exceed current health
+
+        m_currentHealth -= realDamage; // Reduce current health by damage taken
+
+        m_healthText.text = m_currentHealth.ToString(); // Set the initial health text
+
+        if (m_currentHealth <= 0)
+        {
+            PassAway();
+        }
+    }
+
+    private void PassAway()
+    {
+        PlayDeathEffect(); // play the death effect
+        Destroy(gameObject); // destroy the enemy when it is close to player
     }
 
     void OnDrawGizmos()

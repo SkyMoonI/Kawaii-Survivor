@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -32,6 +33,8 @@ public class Enemy : MonoBehaviour
     [SerializeField] private float m_currentHealth;
     private TMP_Text m_healthText; // health text to display the current health
 
+    [Header("Actions")]
+    public static Action<float, Vector2> onDamageTaken; // action to notify when the enemy is damaged
 
     [Header("DEBUG")]
     [SerializeField] private bool m_isGizmosEnabled;
@@ -85,7 +88,7 @@ public class Enemy : MonoBehaviour
     {
         SetRendererVisiblity(false); // hide the character renderer
 
-        Vector3 targetScale = m_spawnIndicatorRenderer.transform.localScale * m_spawnIndicatorDuration; // get the target scale of the spawn indicator
+        Vector3 targetScale = m_spawnIndicatorRenderer.transform.localScale * m_spawnIndicatorScale; // get the target scale of the spawn indicator
         LeanTween.scale(m_spawnIndicatorRenderer.gameObject, targetScale, m_spawnIndicatorDuration)
         .setLoopPingPong(m_spawnIndicatorLoopCount)
         .setOnComplete(SpawnSequenceCompleted);
@@ -135,6 +138,8 @@ public class Enemy : MonoBehaviour
         m_currentHealth -= realDamage; // Reduce current health by damage taken
 
         m_healthText.text = m_currentHealth.ToString(); // Set the initial health text
+
+        onDamageTaken?.Invoke(realDamage, transform.position); // Notify that the enemy has been damaged
 
         if (m_currentHealth <= 0)
         {

@@ -18,6 +18,7 @@ public class Enemy : MonoBehaviour
     [SerializeField] private int m_spawnIndicatorLoopCount = 4; // delay of the spawn indicator
     private bool m_hasSpawned; // flag to check if the enemy has spawned
     [SerializeField] private float m_playerDetectionDistance; // minimum distance to player
+    private Collider2D m_collider; // collider of the enemy
 
     [Header("Effects")]
     [SerializeField] private ParticleSystem m_enemyDeathEffectPrefab; // prefab to spawn when enemy dies
@@ -41,6 +42,9 @@ public class Enemy : MonoBehaviour
 
     void Awake()
     {
+        m_collider = GetComponent<Collider2D>(); // get the collider of the enemy
+        m_collider.enabled = false; // disable the collider until the spawn sequence is completed
+
         m_player = FindFirstObjectByType<Player>();
 
         m_enemyMovement = GetComponent<EnemyMovement>();
@@ -59,7 +63,10 @@ public class Enemy : MonoBehaviour
     {
         m_currentHealth = m_maxHealth; // Set the initial health to max health
         m_healthText = GetComponentInChildren<TMP_Text>(); // Find the health text in the scene
-        m_healthText.text = m_currentHealth.ToString(); // Set the initial health text
+        if (m_healthText != null) // Check if health text is assigned
+        {
+            m_healthText.text = m_currentHealth.ToString(); // Set the initial health text
+        }
 
         StartSpawnSequence();
     }
@@ -100,6 +107,9 @@ public class Enemy : MonoBehaviour
 
         m_hasSpawned = true; // set the spawn flag to true
 
+        // enable the collider after the spawn sequence is completed. Because we don't want the enemy to be found by the weapon, so that we don't attack them.
+        m_collider.enabled = true;
+
         m_enemyMovement.enabled = true; // enable the enemy movement script
         m_enemyMovement.SetPlayer(m_player); // set the player reference in the enemy movement script
     }
@@ -137,7 +147,10 @@ public class Enemy : MonoBehaviour
 
         m_currentHealth -= realDamage; // Reduce current health by damage taken
 
-        m_healthText.text = m_currentHealth.ToString(); // Set the initial health text
+        if (m_healthText != null) // Check if health text is assigned
+        {
+            m_healthText.text = m_currentHealth.ToString();
+        }
 
         onDamageTaken?.Invoke(realDamage, transform.position); // Notify that the enemy has been damaged
 

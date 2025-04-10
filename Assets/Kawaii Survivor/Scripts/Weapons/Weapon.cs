@@ -13,6 +13,7 @@ public class Weapon : MonoBehaviour
 
     [Header("Elements")]
     [SerializeField] private Transform m_hitDetectionTransform; // The point where the weapon fires from
+    private BoxCollider2D m_hitDetectionCollider; // The collider used for hit detection
 
     [Header("Settings")]
     [SerializeField] private float m_enemyDetectionRange;
@@ -37,6 +38,7 @@ public class Weapon : MonoBehaviour
     void Awake()
     {
         m_animator = GetComponent<Animator>(); // Get the Animator component attached to the weapon
+        m_hitDetectionCollider = m_hitDetectionTransform.GetComponent<BoxCollider2D>(); // Get the BoxCollider2D component attached to the hit detection transform
     }
     void Start()
     {
@@ -83,7 +85,6 @@ public class Weapon : MonoBehaviour
         Enemy closestEnemy = null;
         float closestDistance = m_enemyDetectionRange; // Initialize the closest distance to infinity
 
-        // Enemy[] enemies = FindObjectsByType<Enemy>(FindObjectsInactive.Exclude, FindObjectsSortMode.None); // Find all enemies in the scene
         Enemy[] enemies = Physics2D.OverlapCircleAll(transform.position, m_enemyDetectionRange, m_enemyMask) // Find all enemies within the detection range
             .Select(collider => collider.GetComponent<Enemy>()) // Get the Enemy component from each collider
             .Where(enemy => enemy != null) // Filter out null enemies
@@ -143,10 +144,17 @@ public class Weapon : MonoBehaviour
 
     private void Attack()
     {
-        Enemy[] enemies = Physics2D.OverlapCircleAll(m_hitDetectionTransform.position, m_hitDetectionRange, m_enemyMask) // Find all enemies within the detection range
-            .Select(collider => collider.GetComponent<Enemy>()) // Get the Enemy component from each collider
-            .Where(enemy => enemy != null) // Filter out null enemies
-            .ToArray(); // Convert to an array
+        Enemy[] enemies = Physics2D.OverlapBoxAll
+        (
+          m_hitDetectionTransform.position,
+          m_hitDetectionCollider.bounds.size,
+          m_hitDetectionTransform.rotation.eulerAngles.z,
+          m_enemyMask
+        ) // Find all enemies within the detection range
+           .Select(collider => collider.GetComponent<Enemy>()) // Get the Enemy component from each collider
+           .Where(enemy => enemy != null) // Filter out null enemies
+           .ToArray(); // Convert to an array
+
 
         if (enemies.Length <= 0) // If no enemies are found within detection range
         {

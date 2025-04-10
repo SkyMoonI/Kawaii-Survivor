@@ -8,20 +8,13 @@ public class EnemyMovement : MonoBehaviour
     [Header("Settings")]
     [SerializeField] private float m_moveSpeed;
 
-    void Update()
-    {
-        if (m_player != null)
-        {
-            FollowPlayer();
-        }
-    }
 
-    public void SetPlayer(Player player)
+    public void StorePlayer(Player player)
     {
         m_player = player;
     }
 
-    private void FollowPlayer()
+    public void FollowPlayer()
     {
         Vector2 directionVector = m_player.transform.position - transform.position; // a vector from enemy to player
         Vector2 normalizedDirectionVector = directionVector.normalized; // normalize it to get raw vector

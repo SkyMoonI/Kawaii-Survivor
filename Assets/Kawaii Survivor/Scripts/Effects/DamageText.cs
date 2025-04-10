@@ -11,7 +11,6 @@ public class DamageText : MonoBehaviour
     {
         m_animator = GetComponent<Animator>();
     }
-    [NaughtyAttributes.Button("Animate")]
     public void Animate(float damage)
     {
         m_damageText.text = damage.ToString(); // set the text to the damage amount

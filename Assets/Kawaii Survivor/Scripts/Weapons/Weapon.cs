@@ -181,7 +181,6 @@ public class Weapon : MonoBehaviour
         Gizmos.color = Color.blue; // Set the color of the Gizmos to red
         Gizmos.DrawWireSphere(transform.position, m_enemyDetectionRange); // Draw a wire sphere at the enemy's position with the detection distance);
 
-        Gizmos.color = Color.red; // Set the color of the Gizmos to red
-        Gizmos.DrawWireSphere(m_hitDetectionTransform.position, m_hitDetectionRange); // Draw a wire sphere at the hit detection point with the hit detection distance
+
     }
 }

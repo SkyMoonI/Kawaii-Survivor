@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-[RequireComponent(typeof(EnemyMovement))]
-public class Enemy : MonoBehaviour
+[RequireComponent(typeof(EnemyMovement)), RequireComponent(typeof(RangeEnemyAttack))]
+public class RangeEnemy : MonoBehaviour
 {
     [Header("Elements")]
     private Player m_player;
     private EnemyMovement m_enemyMovement;
+    private RangeEnemyAttack m_rangeEnemyAttack; // reference to the enemy attack script
 
     [Header("Spawn Related")]
     [SerializeField] private SpriteRenderer m_characterSpriteRenderer; // enemy sprite renderer
@@ -23,11 +24,6 @@ public class Enemy : MonoBehaviour
     [Header("Effects")]
     [SerializeField] private ParticleSystem m_enemyDeathEffectPrefab; // prefab to spawn when enemy dies
 
-    [Header("Attack Settings")]
-    [SerializeField] private float m_attackFrequency; // attack frequency in seconds
-    private float m_attackDelay; // attack duration in seconds
-    private float m_attackTimer; // attack range in units
-    [SerializeField] private float m_attackDamage = 10f; // damage dealt to the player
 
     [Header("Health")]
     [SerializeField] private float m_maxHealth;
@@ -43,10 +39,11 @@ public class Enemy : MonoBehaviour
     void Awake()
     {
         m_collider = GetComponent<Collider2D>(); // get the collider of the enemy
+        m_enemyMovement = GetComponent<EnemyMovement>(); // get the enemy movement script
+        m_rangeEnemyAttack = GetComponent<RangeEnemyAttack>(); // get the enemy attack script
 
         m_player = FindFirstObjectByType<Player>();
-
-        m_enemyMovement = GetComponent<EnemyMovement>();
+        m_rangeEnemyAttack.StorePlayer(m_player); // set the player reference in the enemy attack script
 
         m_healthText = GetComponentInChildren<TMP_Text>(); // Find the health text in the scene
 
@@ -61,11 +58,9 @@ public class Enemy : MonoBehaviour
     {
         m_currentHealth = m_maxHealth; // Set the initial health to max health
 
-        m_enemyMovement.enabled = false; // disable the enemy movement script until the spawn sequence is completed
-
-        m_attackDelay = 1f / m_attackFrequency; // calculate the attack time based on the frequency per second
-
         m_collider.enabled = false; // disable the collider until the spawn sequence is completed
+
+        m_enemyMovement.enabled = false; // disable the enemy movement script until the spawn sequence is completed
 
         if (m_healthText != null) // Check if health text is assigned
         {
@@ -79,15 +74,26 @@ public class Enemy : MonoBehaviour
     {
         if (!m_hasSpawned) return;
 
-        if (m_attackTimer >= m_attackDelay)
+        ManageAttack();
+    }
+
+    private void ManageAttack()
+    {
+        float distanceToPlayer = Vector2.Distance(transform.position, m_player.transform.position); // get the distance to player
+
+        if (distanceToPlayer > m_playerDetectionDistance)
         {
-            TryAttack();
+            m_enemyMovement.FollowPlayer();
         }
         else
         {
-            WaitForAttack();
-            m_enemyMovement.FollowPlayer();
+            TryAttack();
         }
+    }
+
+    private void TryAttack()
+    {
+        m_rangeEnemyAttack.AutoAim(); // call the attack method in the enemy attack script
     }
 
     private void SetRendererVisiblity(bool isVisible)
@@ -117,27 +123,6 @@ public class Enemy : MonoBehaviour
 
         m_enemyMovement.enabled = true; // enable the enemy movement script
         m_enemyMovement.StorePlayer(m_player); // set the player reference in the enemy movement script
-    }
-
-    private void TryAttack()
-    {
-        float distanceToPlayer = Vector2.Distance(transform.position, m_player.transform.position); // get the distance to player
-
-        if (distanceToPlayer < m_playerDetectionDistance)
-        {
-            Attack();
-        }
-    }
-    private void Attack()
-    {
-        m_player.TakeDamage(m_attackDamage); // deal damage to the player
-
-        m_attackTimer = 0f; // reset the attack delay
-    }
-
-    private void WaitForAttack()
-    {
-        m_attackTimer += Time.deltaTime; // increase the attack delay
     }
 
     private void PlayDeathEffect()

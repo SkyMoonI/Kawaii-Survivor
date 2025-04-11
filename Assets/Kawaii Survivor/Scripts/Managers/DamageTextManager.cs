@@ -49,6 +49,7 @@ public class DamageTextManager : MonoBehaviour
     {
         // Destroy the damage text instance
         Destroy(damageTextInstance.gameObject);
+        LeanTween.cancel(gameObject); // cancel the delayed call to deactivate the bullet
     }
 
     private void DamageTextCallBack(float damage, Vector2 enemyPosition)
@@ -60,7 +61,7 @@ public class DamageTextManager : MonoBehaviour
 
         damageTextInstance.Animate(damage); // Call the Animate method to play the animation
 
-        LeanTween.delayedCall(1f, () => { m_damageTextPool.Release(damageTextInstance); }); // release the damage text instance back to the pool after 1 second
+        LeanTween.delayedCall(gameObject, 1f, () => { m_damageTextPool.Release(damageTextInstance); }); // release the damage text instance back to the pool after 1 second
     }
 
 }

@@ -7,6 +7,8 @@ public abstract class Enemy : MonoBehaviour
     [Header("Elements")]
     protected Player m_player;
     protected EnemyMovement m_enemyMovement;
+    protected Collider2D m_collider; // collider of the enemy
+
 
     [Header("Spawn Related")]
     [SerializeField] protected SpriteRenderer m_characterSpriteRenderer; // enemy sprite renderer
@@ -16,7 +18,6 @@ public abstract class Enemy : MonoBehaviour
     [SerializeField] protected int m_spawnIndicatorLoopCount = 4; // delay of the spawn indicator
     protected bool m_hasSpawned; // flag to check if the enemy has spawned
     [SerializeField] protected float m_playerDetectionDistance; // minimum distance to player
-    protected Collider2D m_collider; // collider of the enemy
 
     [Header("Effects")]
     [SerializeField] protected ParticleSystem m_enemyDeathEffectPrefab; // prefab to spawn when enemy dies
@@ -136,6 +137,11 @@ public abstract class Enemy : MonoBehaviour
     }
 
     protected abstract void TryAttack();
+
+    public Vector2 GetCenterPosition()
+    {
+        return m_collider.bounds.center; // get the center position of the player collider
+    }
 
     protected void OnDrawGizmos()
     {

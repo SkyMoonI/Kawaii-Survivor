@@ -3,84 +3,64 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class Weapon : MonoBehaviour
+public abstract class Weapon : MonoBehaviour
 {
-    private enum State
-    {
-        Idle,
-        Attack
-    }
-
-    [Header("Elements")]
-    [SerializeField] private Transform m_hitDetectionTransform; // The point where the weapon fires from
-    private BoxCollider2D m_hitDetectionCollider; // The collider used for hit detection
-
     [Header("Settings")]
-    [SerializeField] private float m_enemyDetectionRange;
-    [SerializeField] private float m_hitDetectionRange;
-    [SerializeField] private LayerMask m_enemyMask; // Layer mask to filter enemies
-    private List<Enemy> m_damagedEnemies = new List<Enemy>(); // List of enemies that have been damaged by the weapon
+    [SerializeField] protected float m_enemyDetectionRange;
+    [SerializeField] protected LayerMask m_enemyMask; // Layer mask to filter enemies
+    protected List<Enemy> m_damagedEnemies = new List<Enemy>(); // List of enemies that have been damaged by the weapon
 
     [Header("Attack Settings")]
-    [SerializeField] private float m_damage; // Damage dealt by the weapon
-    [SerializeField] private float m_attackFrequency; // attack frequency in seconds
-    private float m_attackDelay; // attack duration in seconds
-    private float m_attackTimer; // attack range in units
+    [SerializeField] protected float m_damage; // Damage dealt by the weapon
+    [SerializeField] protected float m_attackFrequency; // attack frequency in seconds
+    protected float m_attackDelay; // attack duration in seconds
+    protected float m_attackTimer; // attack range in units
 
     [Header("Animations")]
-    [SerializeField] private float m_aimLerp; // Lerp speed for aiming
-    private State m_state; // Current state of the weapon
-    private Animator m_animator; // Animator component for weapon animations
+    [SerializeField] protected float m_aimLerp; // Lerp speed for aiming
+    protected Vector2 m_targetUpVector; // Target up vector for aiming
 
     [Header("DEBUG")]
-    [SerializeField] private bool m_isGizmosEnabled;
+    [SerializeField] protected bool m_isGizmosEnabled;
 
-    void Awake()
-    {
-        m_animator = GetComponent<Animator>(); // Get the Animator component attached to the weapon
-        m_hitDetectionCollider = m_hitDetectionTransform.GetComponent<BoxCollider2D>(); // Get the BoxCollider2D component attached to the hit detection transform
-    }
     void Start()
     {
-        m_state = State.Idle; // Set the initial state to Idle
         m_attackDelay = 1f / m_attackFrequency; // calculate the attack time based on the frequency per second
-        m_animator.speed = m_attackFrequency;
     }
-    // Update is called once per frame
-    void Update()
+
+    protected void Update()
     {
-        switch (m_state)
-        {
-            case State.Idle:
-                AutoAim();
-                break;
-            case State.Attack:
-                Attacking(); // Call the attacking method
-                break;
-        }
-
+        CleanAim();
     }
 
-    private void AutoAim()
+    private void CleanAim()
+    {
+        transform.up = Vector3.Lerp(transform.up, m_targetUpVector, m_aimLerp * Time.deltaTime); // Set the weapon's up direction to the world up direction
+
+    }
+    protected void AutoAim()
     {
         Enemy closestEnemy = GetClosestEnemy(); // Get the closest enemy within detection range
-        Vector2 targetUpVector = Vector3.up;
 
         if (closestEnemy == null) // If no closest enemy is found, return
         {
-            transform.up = Vector3.Lerp(transform.up, targetUpVector, m_aimLerp * Time.deltaTime); // Set the weapon's up direction to the world up direction
+            Vector2 defaultPosition = Vector3.up;
+            m_targetUpVector = defaultPosition; // Set the target up vector to the default position
+            // transform.up = Vector3.Lerp(transform.up, targetUpVector, m_aimLerp * Time.deltaTime); // Set the weapon's up direction to the world up direction
         }
         else
         {
-            targetUpVector = (closestEnemy.transform.position - transform.position).normalized; // Calculate the direction to the closest enemy
-            transform.up = Vector3.Lerp(transform.up, targetUpVector, m_aimLerp * Time.deltaTime); // Smoothly rotate the weapon towards the closest enemy
+            Vector2 directionToEnemy = (closestEnemy.transform.position - transform.position).normalized;
+            m_targetUpVector = directionToEnemy; // Calculate the direction to the closest enemy
+            // transform.up = targetUpVector; // Set the weapon's up direction to the direction of the closest enemy directly
+            // transform.up = Vector3.Lerp(transform.up, targetUpVector, m_aimLerp * Time.deltaTime); // Smoothly rotate the weapon towards the closest enemy
             ManageAttack();
         }
 
         WaitForAttack(); // Wait for the attack delay for every frame except while attacking
     }
 
-    private Enemy GetClosestEnemy()
+    protected Enemy GetClosestEnemy()
     {
         Enemy closestEnemy = null;
         float closestDistance = m_enemyDetectionRange; // Initialize the closest distance to infinity
@@ -108,8 +88,9 @@ public class Weapon : MonoBehaviour
 
         return closestEnemy;
     }
+    protected abstract void StartAttack();
 
-    private void ManageAttack()
+    protected void ManageAttack()
     {
         if (m_attackTimer >= m_attackDelay)
         {
@@ -118,60 +99,12 @@ public class Weapon : MonoBehaviour
         }
     }
 
-    private void WaitForAttack()
+    protected void WaitForAttack()
     {
         m_attackTimer += Time.deltaTime; // increase the attack delay
     }
 
-    [NaughtyAttributes.Button]
-    private void StartAttack()
-    {
-        m_animator.Play("Attack"); // Play the attack animation
-        m_state = State.Attack; // Set the state to Attack
-        m_damagedEnemies.Clear(); // Clear the list of damaged enemies
-    }
-
-    private void Attacking()
-    {
-        Attack();
-    }
-
-    private void StopAttack()
-    {
-        m_state = State.Idle; // Set the state to Idle
-        m_damagedEnemies.Clear(); // Clear the list of damaged enemies
-    }
-
-    private void Attack()
-    {
-        Enemy[] enemies = Physics2D.OverlapBoxAll
-        (
-          m_hitDetectionTransform.position,
-          m_hitDetectionCollider.bounds.size,
-          m_hitDetectionTransform.rotation.eulerAngles.z,
-          m_enemyMask
-        ) // Find all enemies within the detection range
-           .Select(collider => collider.GetComponent<Enemy>()) // Get the Enemy component from each collider
-           .Where(enemy => enemy != null) // Filter out null enemies
-           .ToArray(); // Convert to an array
-
-
-        if (enemies.Length <= 0) // If no enemies are found within detection range
-        {
-            return; // Return null
-        }
-
-        foreach (Enemy enemy in enemies)
-        {
-            if (!m_damagedEnemies.Contains(enemy)) // Check if the enemy has already been damaged
-            {
-                m_damagedEnemies.Add(enemy); // Add the enemy to the list of damaged enemies to avoid double damage
-                enemy.TakeDamage(m_damage);
-            }
-        }
-    }
-
-    void OnDrawGizmos()
+    protected virtual void OnDrawGizmos()
     {
         if (m_isGizmosEnabled == false)
         {

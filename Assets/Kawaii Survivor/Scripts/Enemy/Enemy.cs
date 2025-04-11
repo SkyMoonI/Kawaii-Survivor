@@ -1,54 +1,43 @@
 using System;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-[RequireComponent(typeof(EnemyMovement))]
-public class Enemy : MonoBehaviour
+public abstract class Enemy : MonoBehaviour
 {
     [Header("Elements")]
-    private Player m_player;
-    private EnemyMovement m_enemyMovement;
+    protected Player m_player;
+    protected EnemyMovement m_enemyMovement;
 
     [Header("Spawn Related")]
-    [SerializeField] private SpriteRenderer m_characterSpriteRenderer; // enemy sprite renderer
-    [SerializeField] private SpriteRenderer m_spawnIndicatorRenderer; // enemy animator
-    [SerializeField] private float m_spawnIndicatorScale = 1.2f; // scale of the spawn indicator
-    [SerializeField] private float m_spawnIndicatorDuration = 0.3f; // duration of the spawn indicator
-    [SerializeField] private int m_spawnIndicatorLoopCount = 4; // delay of the spawn indicator
-    private bool m_hasSpawned; // flag to check if the enemy has spawned
-    [SerializeField] private float m_playerDetectionDistance; // minimum distance to player
-    private Collider2D m_collider; // collider of the enemy
+    [SerializeField] protected SpriteRenderer m_characterSpriteRenderer; // enemy sprite renderer
+    [SerializeField] protected SpriteRenderer m_spawnIndicatorRenderer; // enemy animator
+    [SerializeField] protected float m_spawnIndicatorScale = 1.2f; // scale of the spawn indicator
+    [SerializeField] protected float m_spawnIndicatorDuration = 0.3f; // duration of the spawn indicator
+    [SerializeField] protected int m_spawnIndicatorLoopCount = 4; // delay of the spawn indicator
+    protected bool m_hasSpawned; // flag to check if the enemy has spawned
+    [SerializeField] protected float m_playerDetectionDistance; // minimum distance to player
+    protected Collider2D m_collider; // collider of the enemy
 
     [Header("Effects")]
-    [SerializeField] private ParticleSystem m_enemyDeathEffectPrefab; // prefab to spawn when enemy dies
-
-    [Header("Attack Settings")]
-    [SerializeField] private float m_attackFrequency; // attack frequency in seconds
-    private float m_attackDelay; // attack duration in seconds
-    private float m_attackTimer; // attack range in units
-    [SerializeField] private float m_attackDamage = 10f; // damage dealt to the player
+    [SerializeField] protected ParticleSystem m_enemyDeathEffectPrefab; // prefab to spawn when enemy dies
 
     [Header("Health")]
-    [SerializeField] private float m_maxHealth;
-    [SerializeField] private float m_currentHealth;
-    private TMP_Text m_healthText; // health text to display the current health
+    [SerializeField] protected float m_maxHealth;
+    [SerializeField] protected float m_currentHealth;
+    protected TMP_Text m_healthText; // health text to display the current health
 
     [Header("Actions")]
     public static Action<float, Vector2> onDamageTaken; // action to notify when the enemy is damaged
 
     [Header("DEBUG")]
-    [SerializeField] private bool m_isGizmosEnabled;
+    [SerializeField] protected bool m_isGizmosEnabled;
 
-    void Awake()
+    protected virtual void Awake()
     {
         m_collider = GetComponent<Collider2D>(); // get the collider of the enemy
-
-        m_player = FindFirstObjectByType<Player>();
-
-        m_enemyMovement = GetComponent<EnemyMovement>();
-
+        m_enemyMovement = GetComponent<EnemyMovement>(); // get the enemy movement script
         m_healthText = GetComponentInChildren<TMP_Text>(); // Find the health text in the scene
+        m_player = FindFirstObjectByType<Player>();
 
         if (m_player == null)
         {
@@ -56,16 +45,13 @@ public class Enemy : MonoBehaviour
             Destroy(gameObject);
         }
     }
-
-    void Start()
+    protected virtual void Start()
     {
         m_currentHealth = m_maxHealth; // Set the initial health to max health
 
-        m_enemyMovement.enabled = false; // disable the enemy movement script until the spawn sequence is completed
-
-        m_attackDelay = 1f / m_attackFrequency; // calculate the attack time based on the frequency per second
-
         m_collider.enabled = false; // disable the collider until the spawn sequence is completed
+
+        m_enemyMovement.enabled = false; // disable the enemy movement script until the spawn sequence is completed
 
         if (m_healthText != null) // Check if health text is assigned
         {
@@ -75,28 +61,13 @@ public class Enemy : MonoBehaviour
         StartSpawnSequence();
     }
 
-    void Update()
-    {
-        if (!m_hasSpawned) return;
-
-        if (m_attackTimer >= m_attackDelay)
-        {
-            TryAttack();
-        }
-        else
-        {
-            WaitForAttack();
-            m_enemyMovement.FollowPlayer();
-        }
-    }
-
-    private void SetRendererVisiblity(bool isVisible)
+    protected void SetRendererVisiblity(bool isVisible)
     {
         m_characterSpriteRenderer.enabled = isVisible; // hide the character renderer
         m_spawnIndicatorRenderer.enabled = !isVisible; // show the spawn indicator renderer
     }
 
-    private void StartSpawnSequence()
+    protected void StartSpawnSequence()
     {
         SetRendererVisiblity(false); // hide the character renderer
 
@@ -106,7 +77,7 @@ public class Enemy : MonoBehaviour
         .setOnComplete(SpawnSequenceCompleted);
     }
 
-    private void SpawnSequenceCompleted()
+    protected void SpawnSequenceCompleted()
     {
         SetRendererVisiblity(true); // show the character renderer
 
@@ -119,28 +90,7 @@ public class Enemy : MonoBehaviour
         m_enemyMovement.StorePlayer(m_player); // set the player reference in the enemy movement script
     }
 
-    private void TryAttack()
-    {
-        float distanceToPlayer = Vector2.Distance(transform.position, m_player.transform.position); // get the distance to player
-
-        if (distanceToPlayer < m_playerDetectionDistance)
-        {
-            Attack();
-        }
-    }
-    private void Attack()
-    {
-        m_player.TakeDamage(m_attackDamage); // deal damage to the player
-
-        m_attackTimer = 0f; // reset the attack delay
-    }
-
-    private void WaitForAttack()
-    {
-        m_attackTimer += Time.deltaTime; // increase the attack delay
-    }
-
-    private void PlayDeathEffect()
+    protected void PlayDeathEffect()
     {
         m_enemyDeathEffectPrefab.transform.SetParent(null); // detach the effect from the enemy
         m_enemyDeathEffectPrefab.Play(); // play the death effect at the enemy's position
@@ -165,13 +115,29 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    private void PassAway()
+    protected void PassAway()
     {
         PlayDeathEffect(); // play the death effect
         Destroy(gameObject); // destroy the enemy when it is close to player
     }
 
-    void OnDrawGizmos()
+    protected void ManageAttack()
+    {
+        float distanceToPlayer = Vector2.Distance(transform.position, m_player.transform.position); // get the distance to player
+
+        if (distanceToPlayer > m_playerDetectionDistance)
+        {
+            m_enemyMovement.FollowPlayer();
+        }
+        else
+        {
+            TryAttack();
+        }
+    }
+
+    protected abstract void TryAttack();
+
+    protected void OnDrawGizmos()
     {
         if (m_isGizmosEnabled == false)
         {

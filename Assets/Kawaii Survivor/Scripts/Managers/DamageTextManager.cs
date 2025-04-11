@@ -17,15 +17,15 @@ public class DamageTextManager : MonoBehaviour
 
     void OnEnable()
     {
-        Enemy.onDamageTaken += DamageTextCallBack;
+        MeleeEnemy.onDamageTaken += DamageTextCallBack;
     }
     void OnDisable()
     {
-        Enemy.onDamageTaken -= DamageTextCallBack;
+        MeleeEnemy.onDamageTaken -= DamageTextCallBack;
     }
     void OnDestroy()
     {
-        Enemy.onDamageTaken -= DamageTextCallBack;
+        MeleeEnemy.onDamageTaken -= DamageTextCallBack;
     }
 
     private DamageText CreateDamageText()

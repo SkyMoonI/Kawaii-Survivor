@@ -7,6 +7,7 @@ public class RangeEnemyAttack : MonoBehaviour
     private Player m_player; // reference to the player
     [SerializeField] private EnemyBullet m_bulletPrefab; // reference to the bullet prefab
     [SerializeField] private Transform m_bulletSpawnPoint; // reference to the bullet spawn point
+    [SerializeField] private GameObject m_bulletObjectHolder; // takes the initiated bullets to avoid cluttering the scene
 
 
     [Header("Attack Settings")]
@@ -34,7 +35,7 @@ public class RangeEnemyAttack : MonoBehaviour
 
     private EnemyBullet CreateBullet()
     {
-        EnemyBullet bulletInstance = Instantiate(m_bulletPrefab, m_bulletSpawnPoint.position, Quaternion.identity, m_bulletSpawnPoint.transform); // set the parent to this object
+        EnemyBullet bulletInstance = Instantiate(m_bulletPrefab, m_bulletSpawnPoint.position, Quaternion.identity, m_bulletObjectHolder.transform); // set the parent to this object
 
         bulletInstance.Configure(this); // set the enemy attack script reference
 

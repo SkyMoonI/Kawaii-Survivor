@@ -904,7 +904,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_enemyDetectionRange: 5
-  m_hitDetectionRange: 0.2
   m_enemyMask:
     serializedVersion: 2
     m_Bits: 64
@@ -8369,7 +8368,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_enemyDetectionRange: 7
-  m_hitDetectionRange: 0.2
   m_enemyMask:
     serializedVersion: 2
     m_Bits: 64
@@ -9673,6 +9671,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6332423151652473269, guid: 4302c49d7a43acc429e3099892936678, type: 3}
+      propertyPath: m_maxHealth
+      value: 1000
+      objectReference: {fileID: 0}
     - target: {fileID: 8303703381604194121, guid: 4302c49d7a43acc429e3099892936678, type: 3}
       propertyPath: m_bulletObjectHolder
       value: 
@@ -9741,6 +9743,10 @@ PrefabInstance:
     - target: {fileID: 4156522768238170358, guid: 099f6499e107557429e1b54c79584803, type: 3}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7875411677181593358, guid: 099f6499e107557429e1b54c79584803, type: 3}
+      propertyPath: m_maxHealth
+      value: 1000
       objectReference: {fileID: 0}
     - target: {fileID: 7875411677181593358, guid: 099f6499e107557429e1b54c79584803, type: 3}
       propertyPath: m_playerDetectionDistance

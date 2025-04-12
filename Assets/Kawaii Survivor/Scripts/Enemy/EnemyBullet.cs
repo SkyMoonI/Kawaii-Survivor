@@ -1,5 +1,6 @@
 using UnityEngine;
 
+[RequireComponent(typeof(Rigidbody2D), typeof(CircleCollider2D))] // require a rigidbody component
 public class EnemyBullet : MonoBehaviour
 {
     [Header("Elements")]

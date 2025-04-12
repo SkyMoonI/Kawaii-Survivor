@@ -11,9 +11,12 @@ public class DamageText : MonoBehaviour
     {
         m_animator = GetComponent<Animator>();
     }
-    public void Animate(float damage)
+    public void Animate(float damage, bool isCriticalHit)
     {
         m_damageText.text = damage.ToString(); // set the text to the damage amount
+
+        m_damageText.color = isCriticalHit ? Color.red : Color.white; // set the text color based on whether it's a critical hit or not
+
         m_animator.Play("Animate");
     }
 }

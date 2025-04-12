@@ -70,7 +70,9 @@ public class RangeWeapon : Weapon
 
         RangeWeaponBullet bulletInstance = m_rangeWeaponBulletPool.Get(); // instantiate the bullet prefab
 
-        bulletInstance.Shoot(m_damage, m_bulletSpeed, directionToEnemy); // shoot the bullet with the specified damage and speed
+        float damage = GetDamage(out bool isCriticalHit); // Get the damage value from the weapon
+
+        bulletInstance.Shoot(damage, m_bulletSpeed, directionToEnemy, isCriticalHit); // shoot the bullet with the specified damage and speed
     }
 
     protected override void OnDrawGizmos()

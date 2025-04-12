@@ -28,7 +28,8 @@ public abstract class Enemy : MonoBehaviour
     protected TMP_Text m_healthText; // health text to display the current health
 
     [Header("Actions")]
-    public static Action<float, Vector2> onDamageTaken; // action to notify when the enemy is damaged
+    public static Action<float, Vector2, bool> onDamageTaken; // action to notify when the enemy is damaged
+    public static Action<Vector2> onEnemyDeath; // action to notify when the enemy dies
 
     [Header("DEBUG")]
     [SerializeField] protected bool m_isGizmosEnabled;
@@ -97,7 +98,7 @@ public abstract class Enemy : MonoBehaviour
         m_enemyDeathEffectPrefab.Play(); // play the death effect at the enemy's position
     }
 
-    public void TakeDamage(float damage)
+    public void TakeDamage(float damage, bool isCriticalHit)
     {
         float realDamage = Mathf.Clamp(damage, 0, m_currentHealth); // Ensure damage doesn't exceed current health
 
@@ -108,7 +109,7 @@ public abstract class Enemy : MonoBehaviour
             m_healthText.text = m_currentHealth.ToString();
         }
 
-        onDamageTaken?.Invoke(realDamage, transform.position); // Notify that the enemy has been damaged
+        onDamageTaken?.Invoke(realDamage, transform.position, isCriticalHit); // Notify that the enemy has been damaged
 
         if (m_currentHealth <= 0)
         {
@@ -118,6 +119,8 @@ public abstract class Enemy : MonoBehaviour
 
     protected void PassAway()
     {
+        onEnemyDeath?.Invoke(transform.position); // Notify that the enemy has died
+
         PlayDeathEffect(); // play the death effect
         Destroy(gameObject); // destroy the enemy when it is close to player
     }

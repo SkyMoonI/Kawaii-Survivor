@@ -90,8 +90,10 @@ public class MeleeWeapon : Weapon
         {
             if (!m_damagedEnemies.Contains(enemy)) // Check if the enemy has already been damaged
             {
+                float damage = GetDamage(out bool isCriticalHit); // Get the damage value from the weapon
+
                 m_damagedEnemies.Add(enemy); // Add the enemy to the list of damaged enemies to avoid double damage
-                enemy.TakeDamage(m_damage);
+                enemy.TakeDamage(damage, isCriticalHit);
             }
         }
     }

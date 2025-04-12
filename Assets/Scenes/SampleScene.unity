@@ -909,6 +909,8 @@ MonoBehaviour:
     m_Bits: 64
   m_damage: 5
   m_attackFrequency: 1
+  m_criticalHitChance: 50
+  m_criticalHitMultiplier: 2
   m_aimLerp: 12
   m_isGizmosEnabled: 1
   m_hitDetectionTransform: {fileID: 611307128}
@@ -8373,6 +8375,8 @@ MonoBehaviour:
     m_Bits: 64
   m_damage: 10
   m_attackFrequency: 1
+  m_criticalHitChance: 50
+  m_criticalHitMultiplier: 2
   m_aimLerp: 12
   m_isGizmosEnabled: 1
   m_bulletPrefab: {fileID: 5358322279353036991, guid: e4f61029f1e680d4babce8cc62d1e1fb, type: 3}

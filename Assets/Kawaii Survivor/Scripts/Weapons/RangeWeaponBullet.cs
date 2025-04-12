@@ -8,9 +8,10 @@ public class RangeWeaponBullet : MonoBehaviour
     private RangeWeapon m_rangeWeapon; // reference to the enemy attack script
 
     [Header("Settings")]
+    [SerializeField] private LayerMask m_enemyLayerMask; // layer mask for the enemy layer
     private float m_damage; // speed of the bullet
     private Enemy m_target;
-    [SerializeField] private LayerMask m_enemyLayerMask; // layer mask for the enemy layer
+    private bool m_isCriticalHit; // flag to indicate if the hit is critical
 
     void Awake()
     {
@@ -48,7 +49,7 @@ public class RangeWeaponBullet : MonoBehaviour
             m_target = other.GetComponent<Enemy>(); // set the target to the enemy that was hit
             LeanTween.cancel(gameObject); // cancel the delayed call to deactivate the bullet
 
-            m_target.TakeDamage(m_damage); // Deal damage to the player
+            m_target.TakeDamage(m_damage, m_isCriticalHit); // Deal damage to the player
 
             m_rangeWeapon.ReleaseBullet(this); // store the bullet in the pool
         }
@@ -59,10 +60,11 @@ public class RangeWeaponBullet : MonoBehaviour
         m_rangeWeapon = rangeWeapon; // set the enemy attack script reference
     }
 
-    public void Shoot(float damage, float speed, Vector2 direction)
+    public void Shoot(float damage, float speed, Vector2 direction, bool isCriticalHit)
     {
         LeanTween.delayedCall(gameObject, 3f, () => m_rangeWeapon.ReleaseBullet(this)); // deactivate the bullet after a short delay
 
+        m_isCriticalHit = isCriticalHit;
         m_damage = damage; // set the bullet damage
 
         transform.right = direction; // set the bullet's rotation to face the player

@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using NaughtyAttributes;
 using UnityEngine;
 
 public abstract class Weapon : MonoBehaviour
@@ -16,8 +15,7 @@ public abstract class Weapon : MonoBehaviour
     [SerializeField] protected float m_attackFrequency; // attack frequency in seconds
     protected float m_attackDelay; // attack duration in seconds
     protected float m_attackTimer; // attack range in units
-    [Range(0, 100)]
-    [SerializeField] protected float m_criticalHitChance; // chance to deal critical hit
+    [SerializeField][Range(0f, 100f)] protected float m_criticalHitChance; // chance to deal critical hit
     [SerializeField] protected float m_criticalHitMultiplier; // multiplier for critical hit damage
 
     [Header("Animations")]

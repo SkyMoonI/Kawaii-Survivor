@@ -2,10 +2,10 @@ using System;
 using System.Collections;
 using UnityEngine;
 
-public class Candy : DroppableCurrency
+public class Cash : DroppableCurrency
 {
     [Header("Actions")]
-    public static Action<Candy> onCollected; // action to call when the candy is collected
+    public static Action<Cash> onCollected; // action to call when the candy is collected
 
     protected override void Collected()
     {

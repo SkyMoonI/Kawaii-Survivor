@@ -7,7 +7,7 @@ public class RangeEnemyAttack : MonoBehaviour
     private Player m_player; // reference to the player
     [SerializeField] private EnemyBullet m_bulletPrefab; // reference to the bullet prefab
     [SerializeField] private Transform m_bulletSpawnPoint; // reference to the bullet spawn point
-    [SerializeField] private GameObject m_bulletObjectHolder; // takes the initiated bullets to avoid cluttering the scene
+    private GameObject m_bulletObjectHolder; // takes the initiated bullets to avoid cluttering the scene
 
 
     [Header("Attack Settings")]
@@ -26,6 +26,7 @@ public class RangeEnemyAttack : MonoBehaviour
 
     void Awake()
     {
+        m_bulletObjectHolder = GameObject.Find("Enemy Bullet Object Holder"); // find the bullet object holder in the scene
         m_enemyBulletPool = new ObjectPool<EnemyBullet>(CreateBullet, OnGetBullet, OnReleaseBullet, OnDestroyBullet, false, 10);
     }
     void Start()

@@ -1,19 +1,13 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class PlayerHealth : MonoBehaviour
 {
     [Header("Elements")]
-    private HealthBar m_healthBar;
+    [SerializeField] private HealthBar m_healthBar;
 
     [Header("Settings")]
     [SerializeField] private float m_maxHealth = 100f;
     [SerializeField] private float m_currentHealth;
-
-    void Awake()
-    {
-        m_healthBar = FindFirstObjectByType<HealthBar>();
-    }
 
     void Start()
     {
@@ -38,8 +32,6 @@ public class PlayerHealth : MonoBehaviour
 
     private void PassAway()
     {
-        // Implement the logic to pass away here
-        Debug.Log("Player has passed away.");
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex); // Reload the current scene
+        GameManager.Instance.SetGameState(GameState.GAMEOVER); // Set the game state to game over
     }
 }

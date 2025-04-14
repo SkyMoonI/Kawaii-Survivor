@@ -73,7 +73,7 @@ public class DropManager : MonoBehaviour
     {
         bool shouldSpawnCash = Random.Range(0f, 100f) <= m_cashSpawnChance; // Randomly decide whether to spawn cash or candy based on the spawn chance
 
-        DroppableCurrency collectable = shouldSpawnCash ? m_candyPool.Get() : m_cashPool.Get(); // Randomly choose between candy and cash prefab
+        DroppableCurrency collectable = shouldSpawnCash ? m_cashPool.Get() : m_candyPool.Get(); // Randomly choose between candy and cash prefab
         collectable.transform.position = enemyPosition; // Set the position of the collectable to the enemy position
 
         TrySpawnChest(enemyPosition); // Try to spawn a chest at the enemy position

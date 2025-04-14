@@ -2,11 +2,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using NaughtyAttributes;
 
-public class WaveManager : MonoBehaviour
+public class WaveManager : MonoBehaviour, IGameStateListener
 {
     [Header("Elements")]
     [SerializeField] private Player m_player;
-    [SerializeField] private WaveUIManager m_waveUIManager; // Reference to the UI manager for updating wave and timer text
+    private WaveUIManager m_waveUIManager; // Reference to the UI manager for updating wave and timer text
 
     [Header("Settings")]
     private float m_timer;
@@ -26,8 +26,6 @@ public class WaveManager : MonoBehaviour
     void Start()
     {
         m_currentWaveIndex = 0;
-
-        StartWave(m_currentWaveIndex); // Start the first wave
     }
 
     void Update()
@@ -111,11 +109,17 @@ public class WaveManager : MonoBehaviour
         {
             m_waveUIManager.UpdateWaveText("All Waves Cleared!"); // Update the UI to indicate all waves are cleared
             m_waveUIManager.UpdateTimerText(""); // Reset the timer text to 0
+            GameManager.Instance.SetGameState(GameState.STAGECOMPLETE); // Set the game state to stage complete
         }
         else
         {
-            StartWave(m_currentWaveIndex); // Start the new wave
+            GameManager.Instance.WaveCompletedCallBack(); // Call the GameManager's wave completed callback
         }
+    }
+
+    private void StartNextWave()
+    {
+        StartWave(m_currentWaveIndex); // Start the next wave
     }
 
     private void DefeatAllEnemies()
@@ -142,6 +146,22 @@ public class WaveManager : MonoBehaviour
         return targetPosition; // Placeholder for spawn position logic
     }
 
+    public void GameStateChangedCallBack(GameState gameState)
+    {
+        switch (gameState)
+        {
+            case GameState.GAME:
+                m_isTimerActive = true; // Start the timer when in game state
+                StartNextWave();
+                break;
+            case GameState.GAMEOVER:
+                m_isTimerActive = false; // Stop the timer when in game over state
+                DefeatAllEnemies(); // Defeat all enemies when game is over
+                break;
+            default:
+                break;
+        }
+    }
 }
 
 

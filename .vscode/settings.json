@@ -61,6 +61,7 @@
         "Behaviour",
         "Mathf",
         "rigidbody",
-        "Rigidbody"
+        "Rigidbody",
+        "WAVETRANSITION"
     ]
 }

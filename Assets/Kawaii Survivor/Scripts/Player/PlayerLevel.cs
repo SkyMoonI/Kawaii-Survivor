@@ -15,6 +15,9 @@ public class PlayerLevel : MonoBehaviour
     private int m_requiredXp; // XP required to level up
     private int m_levelEarnedThisWave; // Number of times the player has leveled up this wave
 
+    [Header("DEBUG")]
+    [SerializeField] private bool m_debugMode = false; // Flag to enable debug mode
+
     void OnEnable()
     {
         UpdateRequiredXp(); // Initialize required XP based on the current level
@@ -57,6 +60,11 @@ public class PlayerLevel : MonoBehaviour
 
     public bool HasLevelUp()
     {
+        if (m_debugMode) // Check if debug mode is enabled
+        {
+            return true; // Always return true in debug mode for testing purposes
+        }
+
         if (m_levelEarnedThisWave > 0)
         {
             m_levelEarnedThisWave--;

@@ -144,7 +144,7 @@ MonoBehaviour:
   m_spawnIndicatorLoopCount: 4
   m_playerDetectionDistance: 1
   m_enemyDeathEffectPrefab: {fileID: 5468911076336684492}
-  m_maxHealth: 10
+  m_maxHealth: 50
   m_currentHealth: 0
   m_isGizmosEnabled: 1
   m_attackFrequency: 2

@@ -3,32 +3,48 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public abstract class Weapon : MonoBehaviour
+public abstract class Weapon : MonoBehaviour, IPlayerStatsDependency
 {
+    [Header("Scriptable Objects")]
+    [field: SerializeField] private WeaponDataSO m_weaponData; // Reference to weapon data scriptable object 
+
     [Header("Settings")]
-    [SerializeField] protected float m_enemyDetectionRange;
+    protected float m_enemyDetectionRange;
     [SerializeField] protected LayerMask m_enemyMask; // Layer mask to filter enemies
     protected List<Enemy> m_damagedEnemies = new List<Enemy>(); // List of enemies that have been damaged by the weapon
 
-    [Header("Attack Settings")]
-    [SerializeField] protected float m_damage; // Damage dealt by the weapon
-    [SerializeField] protected float m_attackFrequency; // attack frequency in seconds
+    [Header("Attack Damage Settings")]
+    protected float m_baseDamage; // base Damage dealt by the weapon
+    protected float m_currentDamage; // Current damage dealt by the weapon
+
+    [Header("Attack Speed Settings")]
+    protected float m_baseAttackFrequency; // base attack frequency in seconds
+    protected float m_currentAttackFrequency; // attack frequency in seconds
     protected float m_attackDelay; // attack duration in seconds
     protected float m_attackTimer; // attack range in units
-    [SerializeField][Range(0f, 100f)] protected float m_criticalHitChance; // chance to deal critical hit
-    [SerializeField] protected float m_criticalPercent; // multiplier for critical hit damage
 
+    [Header("Range Settings")]
+    protected float m_baseAttackRange; // attack range in units
+    protected float m_currentAttackRange; // attack range in units
+
+    [Header("Critical Hit Settings")]
+    protected float m_baseCriticalHitChance; // base chance to deal critical hit
+    protected float m_currentCriticalHitChance; // chance to deal critical hit
+    protected float m_baseCriticalPercent; // multiplier for critical hit damage
+    protected float m_currentCriticalPercent; // multiplier for critical hit damage
 
     [Header("Animations")]
     [SerializeField] protected float m_aimLerp; // Lerp speed for aiming
     protected Vector2 m_targetUpVector; // Target up vector for aiming
+
+    [Header("Leveling")]
+    [SerializeField] protected int m_level; // Current level of the weapon
 
     [Header("DEBUG")]
     [SerializeField] protected bool m_isGizmosEnabled;
 
     void Start()
     {
-        m_attackDelay = 1f / m_attackFrequency; // calculate the attack time based on the frequency per second
     }
 
     protected void Update()
@@ -111,14 +127,14 @@ public abstract class Weapon : MonoBehaviour
     {
         isCriticalHit = false; // Initialize isCriticalHit to false
 
-        if (UnityEngine.Random.Range(0, 101) < m_criticalHitChance) // 10% chance to deal critical hit
+        if (UnityEngine.Random.Range(0, 101) < m_currentCriticalHitChance) // 10% chance to deal critical hit
         {
             isCriticalHit = true; // Set isCriticalHit to true
-            return m_damage * m_criticalPercent; // Return double damage for critical hit
+            return m_currentDamage * m_currentCriticalPercent; // Return double damage for critical hit
         }
 
         // If not a critical hit, return normal damage
-        return m_damage;
+        return m_currentDamage;
     }
 
     protected virtual void OnDrawGizmos()
@@ -130,9 +146,54 @@ public abstract class Weapon : MonoBehaviour
 
         Gizmos.color = Color.blue; // Set the color of the Gizmos to red
         Gizmos.DrawWireSphere(transform.position, m_enemyDetectionRange); // Draw a wire sphere at the enemy's position with the detection distance);
-
-
     }
 
+    private void ConfigureStats()
+    {
+        float levelMultiplier = 1 + (m_level / 3); // Calculate the level multiplier based on the weapon level
 
+        m_baseDamage = m_weaponData.GetStatValue(Stat.Attack) * levelMultiplier; // Set the base damage from the weapon data
+
+        m_baseAttackFrequency = m_weaponData.GetStatValue(Stat.AttackSpeed) * levelMultiplier; // Set the attack frequency from the weapon data
+
+        if (m_weaponData.Prefab.GetType() == typeof(RangeWeapon))
+        {
+            m_baseAttackRange = m_weaponData.GetStatValue(Stat.Range) * levelMultiplier; // Set the base attack range from the weapon data
+        }
+        else if (m_weaponData.Prefab.GetType() == typeof(MeleeWeapon))
+        {
+            m_baseAttackRange = m_weaponData.GetStatValue(Stat.Range); // Set the base attack range from the weapon data
+            m_currentAttackRange = m_baseAttackRange; // Set the current attack range to the base attack range
+        }
+
+        m_baseCriticalHitChance = m_weaponData.GetStatValue(Stat.CriticalChance) * levelMultiplier; // Set the base critical hit chance from the weapon data
+
+        m_baseCriticalPercent = m_weaponData.GetStatValue(Stat.CriticalDamage) * levelMultiplier; // Set the base critical hit damage from the weapon data
+    }
+
+    public void UpdateStats(PlayerStatManager playerStatManager)
+    {
+        ConfigureStats(); // Configure the stats from the weapon data
+
+        float addedDamage = 1 + (playerStatManager.GetStatValue(Stat.Attack) / 100);
+        m_currentDamage = m_baseDamage * addedDamage;
+        m_currentDamage = Mathf.Max(m_currentDamage, 1);
+
+        float addedAttackSpeed = 1 + (playerStatManager.GetStatValue(Stat.AttackSpeed) / 100);
+        m_currentAttackFrequency = m_baseAttackFrequency * addedAttackSpeed; // Set the attack frequency from the weapon data
+        m_attackDelay = 1f / m_currentAttackFrequency; // calculate the attack time based on the frequency per second
+
+        if (m_weaponData.Prefab.GetType() == typeof(RangeWeapon))
+        {
+            float addedAttackRange = 1 + (playerStatManager.GetStatValue(Stat.Range) / 100);
+            m_currentAttackRange = m_baseAttackRange * addedAttackRange; // Set the attack range from the weapon data
+        }
+        m_enemyDetectionRange = m_currentAttackRange; // Set the enemy detection range to the attack range
+
+        float addedCriticalHitChance = 1 + (playerStatManager.GetStatValue(Stat.CriticalChance) / 100);
+        m_currentCriticalHitChance = m_baseCriticalHitChance * addedCriticalHitChance; // Set the attack range from the weapon data
+
+        float addedCriticalHitDamage = 1 + (playerStatManager.GetStatValue(Stat.CriticalDamage) / 100);
+        m_currentCriticalPercent = m_baseCriticalPercent * addedCriticalHitDamage;
+    }
 }

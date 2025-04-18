@@ -28,7 +28,7 @@ public class MeleeWeapon : Weapon
     void Start()
     {
         m_state = State.Idle; // Set the initial state to Idle
-        m_animator.speed = m_attackFrequency;
+        m_animator.speed = m_currentAttackFrequency;
     }
 
     // Update is called once per frame

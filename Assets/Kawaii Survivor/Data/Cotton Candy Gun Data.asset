@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 579122b190702ba45ae74364589c15a5, type: 3}
+  m_Name: Cotton Candy Gun Data
+  m_EditorClassIdentifier: 
+  <Name>k__BackingField: Cotton Candy Gun
+  <Sprite>k__BackingField: {fileID: 0}
+  <PurchasePrice>k__BackingField: 100
+  <Prefab>k__BackingField: {fileID: 862731438596223956, guid: 9fe29df1f2012ae429b90819eab7143f, type: 3}
+  m_attack: 10
+  m_attackSpeed: 5
+  m_criticalChance: 50
+  m_criticalDamage: 2
+  m_range: 15

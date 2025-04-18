@@ -23,7 +23,7 @@ public class HealthBar : MonoBehaviour
     {
         if (maxHealth > 0)
         {
-            m_slider.value = currentHealth / maxHealth; // Update the slider value based on current and max health
+            m_slider.value = (float)currentHealth / maxHealth; // Update the slider value based on current and max health
             UpdateText(currentHealth, maxHealth);
         }
     }

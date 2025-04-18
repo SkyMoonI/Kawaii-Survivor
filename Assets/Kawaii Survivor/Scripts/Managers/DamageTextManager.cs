@@ -18,14 +18,17 @@ public class DamageTextManager : MonoBehaviour
     void OnEnable()
     {
         Enemy.onDamageTaken += DamageTextCallBack;
+        PlayerHealth.onAttackDodged += AttackDodgedCallback; // Subscribe to the attack dodged event
     }
     void OnDisable()
     {
         Enemy.onDamageTaken -= DamageTextCallBack;
+        PlayerHealth.onAttackDodged -= AttackDodgedCallback; // Unsubscribe from the attack dodged event
     }
     void OnDestroy()
     {
         Enemy.onDamageTaken -= DamageTextCallBack;
+        PlayerHealth.onAttackDodged -= AttackDodgedCallback; // Unsubscribe from the attack dodged event
     }
 
     private DamageText CreateDamageText()
@@ -59,9 +62,20 @@ public class DamageTextManager : MonoBehaviour
         Vector2 spawnPosition = enemyPosition + Vector2.up * 1.5f; // spawn position above the enemy
         damageTextInstance.transform.position = spawnPosition; // set the position of the damage text instance
 
-        damageTextInstance.Animate(damage, isCriticalHit); // Call the Animate method to play the animation
+        damageTextInstance.Animate(damage.ToString(), isCriticalHit); // Call the Animate method to play the animation
 
         LeanTween.delayedCall(gameObject, 1f, () => { m_damageTextPool.Release(damageTextInstance); }); // release the damage text instance back to the pool after 1 second
     }
 
+    private void AttackDodgedCallback(Vector2 playerPosition)
+    {
+        DamageText damageTextInstance = m_damageTextPool.Get(); // get a damage text instance from the pool
+
+        Vector2 spawnPosition = playerPosition + Vector2.up * 1.5f; // spawn position above the enemy
+        damageTextInstance.transform.position = spawnPosition; // set the position of the damage text instance
+
+        damageTextInstance.Animate("Dodged", false); // Call the Animate method to play the animation
+
+        LeanTween.delayedCall(gameObject, 1f, () => { m_damageTextPool.Release(damageTextInstance); }); // release the damage text instance back to the pool after 1 second
+    }
 }

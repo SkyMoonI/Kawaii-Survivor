@@ -5349,7 +5349,7 @@ MonoBehaviour:
   m_bulletPrefab: {fileID: -8427825869917469497, guid: 49df342cacf7b8940848a146869c541e, type: 3}
   m_bulletSpawnPoint: {fileID: 5704107433161248268}
   m_attackFrequency: 1
-  m_attackDamage: 10
+  m_attackDamage: 2
   m_bulletSpeed: 10
   m_isGizmosEnabled: 1
 --- !u!114 &1607027275956888505
@@ -5395,7 +5395,7 @@ CircleCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0

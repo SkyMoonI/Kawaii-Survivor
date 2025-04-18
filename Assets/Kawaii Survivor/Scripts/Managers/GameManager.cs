@@ -7,6 +7,7 @@ using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
+    public GameState CurrentGameState { get; private set; } // Property to store the current game state
 
     void Awake()
     {
@@ -35,6 +36,8 @@ public class GameManager : MonoBehaviour
         {
             listener.GameStateChangedCallBack(gameState); // Notify each listener of the state change
         }
+
+        CurrentGameState = gameState; // Update the current game state
     }
 
     public void ManageGameOver()

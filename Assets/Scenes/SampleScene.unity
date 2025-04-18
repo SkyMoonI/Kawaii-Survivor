@@ -1077,6 +1077,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e3626c4142c45343ae390348983333d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerStatManager: {fileID: 1884112385}
   m_upgradeContainers:
   - {fileID: 1606169689}
   - {fileID: 341812029}
@@ -1398,7 +1399,7 @@ MonoBehaviour:
   m_damage: 5
   m_attackFrequency: 5
   m_criticalHitChance: 50
-  m_criticalHitMultiplier: 2
+  m_criticalPercent: 2
   m_aimLerp: 12
   m_isGizmosEnabled: 1
   m_hitDetectionTransform: {fileID: 611307128}
@@ -8350,6 +8351,7 @@ Transform:
   - {fileID: 1365665876}
   - {fileID: 571757737}
   - {fileID: 223609741}
+  - {fileID: 1884112384}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &843894914
@@ -10403,7 +10405,7 @@ MonoBehaviour:
   m_player: {fileID: 1632437998}
   m_waves:
   - name: Wave 00
-    waveDuration: 15
+    waveDuration: 100
     segments:
     - enemyPrefab: {fileID: 7875411677181593358, guid: 099f6499e107557429e1b54c79584803, type: 3}
       timeStartEnd: {x: 0, y: 34}
@@ -11516,10 +11518,10 @@ MonoBehaviour:
   m_enemyMask:
     serializedVersion: 2
     m_Bits: 64
-  m_damage: 10
+  m_damage: 5
   m_attackFrequency: 5
   m_criticalHitChance: 50
-  m_criticalHitMultiplier: 2
+  m_criticalPercent: 2
   m_aimLerp: 12
   m_isGizmosEnabled: 1
   m_bulletPrefab: {fileID: 5358322279353036991, guid: e4f61029f1e680d4babce8cc62d1e1fb, type: 3}
@@ -11608,7 +11610,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_moveJoystick: {fileID: 1559121516}
-  m_moveSpeed: 3
+  m_baseMoveSpeed: 3
+  m_moveSpeed: 0
 --- !u!58 &1632437997
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -11670,8 +11673,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_healthBar: {fileID: 1002754018}
-  m_maxHealth: 100
-  m_currentHealth: 0
+  m_baseHealth: 1000
+  m_baseArmor: 0
+  m_baseLifeSteal: 100
+  m_baseDodgeChance: 100
+  m_baseHealthRegen: 0
 --- !u!114 &1632438000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12681,6 +12687,51 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!1 &1884112383
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1884112384}
+  - component: {fileID: 1884112385}
+  m_Layer: 0
+  m_Name: Player Stat Manager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1884112384
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1884112383}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 833111483}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1884112385
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1884112383}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4fc70ccc0dc00204399c93592d3c2036, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_characterData: {fileID: 11400000, guid: 0ff66acd283f8174ca80d98640595e93, type: 2}
 --- !u!1 &1892147549
 GameObject:
   m_ObjectHideFlags: 0

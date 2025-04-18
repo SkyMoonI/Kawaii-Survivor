@@ -16,7 +16,8 @@ public abstract class Weapon : MonoBehaviour
     protected float m_attackDelay; // attack duration in seconds
     protected float m_attackTimer; // attack range in units
     [SerializeField][Range(0f, 100f)] protected float m_criticalHitChance; // chance to deal critical hit
-    [SerializeField] protected float m_criticalHitMultiplier; // multiplier for critical hit damage
+    [SerializeField] protected float m_criticalPercent; // multiplier for critical hit damage
+
 
     [Header("Animations")]
     [SerializeField] protected float m_aimLerp; // Lerp speed for aiming
@@ -113,7 +114,7 @@ public abstract class Weapon : MonoBehaviour
         if (UnityEngine.Random.Range(0, 101) < m_criticalHitChance) // 10% chance to deal critical hit
         {
             isCriticalHit = true; // Set isCriticalHit to true
-            return m_damage * m_criticalHitMultiplier; // Return double damage for critical hit
+            return m_damage * m_criticalPercent; // Return double damage for critical hit
         }
 
         // If not a critical hit, return normal damage
@@ -132,4 +133,6 @@ public abstract class Weapon : MonoBehaviour
 
 
     }
+
+
 }

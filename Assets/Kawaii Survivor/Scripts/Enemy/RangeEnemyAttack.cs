@@ -12,7 +12,7 @@ public class RangeEnemyAttack : MonoBehaviour
 
     [Header("Attack Settings")]
     [SerializeField] private float m_attackFrequency; // attack frequency in seconds
-    [SerializeField] private float m_attackDamage = 10f; // damage dealt to the player
+    [SerializeField] private float m_attackDamage; // damage dealt to the player
     [SerializeField] private float m_bulletSpeed = 10f; // speed of the bullet
     private float m_attackDelay; // attack duration in seconds
     private float m_attackTimer; // attack range in units

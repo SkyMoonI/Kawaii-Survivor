@@ -4,6 +4,8 @@ using System.Linq;
 
 public class PlayerStatManager : MonoBehaviour
 {
+    public static PlayerStatManager Instance { get; private set; } // Singleton instance of PlayerStatManager
+
     [Header("Data")]
     [SerializeField] private CharacterDataSO m_characterData; // Reference to character data scriptable object
 
@@ -13,6 +15,15 @@ public class PlayerStatManager : MonoBehaviour
 
     void Awake()
     {
+        if (Instance == null) // If no instance exists, set this as the instance
+        {
+            Instance = this;
+        }
+        else if (Instance != this) // If another instance exists, destroy this object
+        {
+            Destroy(gameObject);
+        }
+
         m_playerStats = m_characterData.BaseStats; // Initialize player stats from character data
 
         foreach (KeyValuePair<Stat, StatData> stat in m_playerStats) // Initialize player stats from character data
@@ -54,14 +65,10 @@ public class PlayerStatManager : MonoBehaviour
 
         foreach (IPlayerStatsDependency dependency in playerStatsDependencies)
         {
-            dependency.UpdateStats(this); // Notify each listener of the state change
+            dependency.UpdateStats(Instance); // Notify each listener of the state change
         }
     }
 }
-
-
-
-
 
 public struct StatData
 {

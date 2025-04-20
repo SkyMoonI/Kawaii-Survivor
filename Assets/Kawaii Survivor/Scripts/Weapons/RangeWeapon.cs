@@ -6,7 +6,7 @@ public class RangeWeapon : Weapon
     [Header("Elements")]
     [SerializeField] private RangeWeaponBullet m_bulletPrefab; // reference to the bullet prefab
     [SerializeField] private Transform m_bulletSpawnPoint; // reference to the bullet spawn point
-    [SerializeField] private GameObject m_bulletObjectHolder; // takes the initiated bullets to avoid cluttering the scene
+    private GameObject m_bulletObjectHolder; // takes the initiated bullets to avoid cluttering the scene
 
     [Header("Attack Settings")]
     [SerializeField] private float m_bulletSpeed = 10f; // speed of the bullet
@@ -20,6 +20,7 @@ public class RangeWeapon : Weapon
     void Awake()
     {
         m_rangeWeaponBulletPool = new ObjectPool<RangeWeaponBullet>(CreateBullet, OnGetBullet, OnReleaseBullet, OnDestroyBullet, false, 10);
+        m_bulletObjectHolder = GameObject.Find("Player Bullet Object Holder"); // find the bullet object holder in the scene
     }
 
     new void Update()

@@ -13,11 +13,11 @@ MonoBehaviour:
   m_Name: DeBoink Data
   m_EditorClassIdentifier: 
   <Name>k__BackingField: DeBoink
-  <Sprite>k__BackingField: {fileID: 0}
+  <Sprite>k__BackingField: {fileID: 5485319108022510092, guid: 15c981701acaf3f4b840cf2f1f7d3446, type: 3}
   <PurchasePrice>k__BackingField: 0
   <Prefab>k__BackingField: {fileID: 3680025457595726110, guid: 410837f7fd87f524ebb876446decf807, type: 3}
   m_attack: 5
-  m_attackSpeed: 5
+  m_attackSpeed: 1
   m_criticalChance: 50
   m_criticalDamage: 2
-  m_range: 5
+  m_range: 3

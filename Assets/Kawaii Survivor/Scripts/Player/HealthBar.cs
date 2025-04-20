@@ -5,14 +5,8 @@ using TMPro; // Assuming you are using TextMeshPro for the text component
 public class HealthBar : MonoBehaviour
 {
     [Header("Elements")]
-    private Slider m_slider;
-    private TMP_Text m_text;
-
-    void Awake()
-    {
-        m_slider = GetComponent<Slider>();
-        m_text = GetComponentInChildren<TMP_Text>(); // Assuming the text is a child of the slider
-    }
+    [SerializeField] private Slider m_slider;
+    [SerializeField] private TMP_Text m_text;
 
     void Start()
     {

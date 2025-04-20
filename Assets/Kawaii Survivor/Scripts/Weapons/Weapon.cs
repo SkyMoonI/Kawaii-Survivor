@@ -43,10 +43,6 @@ public abstract class Weapon : MonoBehaviour, IPlayerStatsDependency
     [Header("DEBUG")]
     [SerializeField] protected bool m_isGizmosEnabled;
 
-    void Start()
-    {
-    }
-
     protected void Update()
     {
         CleanAim();
@@ -150,7 +146,7 @@ public abstract class Weapon : MonoBehaviour, IPlayerStatsDependency
 
     private void ConfigureStats()
     {
-        float levelMultiplier = 1 + (m_level / 3); // Calculate the level multiplier based on the weapon level
+        float levelMultiplier = 1 + (m_level / 3f); // Calculate the level multiplier based on the weapon level
 
         m_baseDamage = m_weaponData.GetStatValue(Stat.Attack) * levelMultiplier; // Set the base damage from the weapon data
 
@@ -175,25 +171,31 @@ public abstract class Weapon : MonoBehaviour, IPlayerStatsDependency
     {
         ConfigureStats(); // Configure the stats from the weapon data
 
-        float addedDamage = 1 + (playerStatManager.GetStatValue(Stat.Attack) / 100);
+        float addedDamage = 1 + (playerStatManager.GetStatValue(Stat.Attack) / 100f);
         m_currentDamage = m_baseDamage * addedDamage;
         m_currentDamage = Mathf.Max(m_currentDamage, 1);
 
-        float addedAttackSpeed = 1 + (playerStatManager.GetStatValue(Stat.AttackSpeed) / 100);
+        float addedAttackSpeed = 1 + (playerStatManager.GetStatValue(Stat.AttackSpeed) / 100f);
         m_currentAttackFrequency = m_baseAttackFrequency * addedAttackSpeed; // Set the attack frequency from the weapon data
         m_attackDelay = 1f / m_currentAttackFrequency; // calculate the attack time based on the frequency per second
 
         if (m_weaponData.Prefab.GetType() == typeof(RangeWeapon))
         {
-            float addedAttackRange = 1 + (playerStatManager.GetStatValue(Stat.Range) / 100);
+            float addedAttackRange = 1 + (playerStatManager.GetStatValue(Stat.Range) / 100f);
             m_currentAttackRange = m_baseAttackRange * addedAttackRange; // Set the attack range from the weapon data
         }
         m_enemyDetectionRange = m_currentAttackRange; // Set the enemy detection range to the attack range
 
-        float addedCriticalHitChance = 1 + (playerStatManager.GetStatValue(Stat.CriticalChance) / 100);
+        float addedCriticalHitChance = 1 + (playerStatManager.GetStatValue(Stat.CriticalChance) / 100f);
         m_currentCriticalHitChance = m_baseCriticalHitChance * addedCriticalHitChance; // Set the attack range from the weapon data
 
-        float addedCriticalHitDamage = 1 + (playerStatManager.GetStatValue(Stat.CriticalDamage) / 100);
+        float addedCriticalHitDamage = 1 + (playerStatManager.GetStatValue(Stat.CriticalDamage) / 100f);
         m_currentCriticalPercent = m_baseCriticalPercent * addedCriticalHitDamage;
+    }
+
+    public void UpgradeTo(int level)
+    {
+        m_level = level; // Set the weapon level to the specified level
+        UpdateStats(PlayerStatManager.Instance); // Update the stats based on the new level
     }
 }

@@ -6,9 +6,6 @@ using NaughtyAttributes;
 
 public class WaveTransitionManager : MonoBehaviour, IGameStateListener
 {
-    [Header("Elements")]
-    [SerializeField] PlayerStatManager playerStatManager;
-
     [Header("Settings")]
     [SerializeField] private UpgradeContainer[] m_upgradeContainers; // Array of buttons for upgrades
 
@@ -109,7 +106,7 @@ public class WaveTransitionManager : MonoBehaviour, IGameStateListener
 
         return () =>
         {
-            playerStatManager.AddPlayerStat(stat, value); // Add the selected stat to the player stat manager
+            PlayerStatManager.Instance.AddPlayerStat(stat, value); // Add the selected stat to the player stat manager
         };
     }
 }

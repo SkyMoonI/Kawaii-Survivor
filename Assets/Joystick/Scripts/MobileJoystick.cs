@@ -102,6 +102,8 @@ namespace Joystick
         /// <returns>The normalized movement vector.</returns>
         public Vector3 GetMoveVector()
         {
+            if (!m_canControl) return Vector3.zero; // If the joystick is not active, return zero vector.
+
             return m_move / canvasScale; // Returns the movement vector, adjusted for canvas scale.
         }
     }

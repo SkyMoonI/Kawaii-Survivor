@@ -142,7 +142,7 @@ MonoBehaviour:
   m_isGizmosEnabled: 1
   m_bulletPrefab: {fileID: 5358322279353036991, guid: e4f61029f1e680d4babce8cc62d1e1fb, type: 3}
   m_bulletSpawnPoint: {fileID: 7419015832138217751}
-  m_bulletObjectHolder: {fileID: 0}
+  m_bulletObjectHolder: {fileID: 6196680627100343703, guid: e4f61029f1e680d4babce8cc62d1e1fb, type: 3}
   m_bulletSpeed: 10
 --- !u!1 &7551213234736384414
 GameObject:

@@ -146,25 +146,13 @@ public abstract class Weapon : MonoBehaviour, IPlayerStatsDependency
 
     private void ConfigureStats()
     {
-        float levelMultiplier = 1 + (m_level / 3f); // Calculate the level multiplier based on the weapon level
+        Dictionary<Stat, StatData> calculatedBaseStats = WeaponStatsCalculator.GetStats(m_weaponData, m_level); // Get the stats from the weapon data
 
-        m_baseDamage = m_weaponData.GetStatValue(Stat.Attack) * levelMultiplier; // Set the base damage from the weapon data
-
-        m_baseAttackFrequency = m_weaponData.GetStatValue(Stat.AttackSpeed) * levelMultiplier; // Set the attack frequency from the weapon data
-
-        if (m_weaponData.Prefab.GetType() == typeof(RangeWeapon))
-        {
-            m_baseAttackRange = m_weaponData.GetStatValue(Stat.Range) * levelMultiplier; // Set the base attack range from the weapon data
-        }
-        else if (m_weaponData.Prefab.GetType() == typeof(MeleeWeapon))
-        {
-            m_baseAttackRange = m_weaponData.GetStatValue(Stat.Range); // Set the base attack range from the weapon data
-            m_currentAttackRange = m_baseAttackRange; // Set the current attack range to the base attack range
-        }
-
-        m_baseCriticalHitChance = m_weaponData.GetStatValue(Stat.CriticalChance) * levelMultiplier; // Set the base critical hit chance from the weapon data
-
-        m_baseCriticalPercent = m_weaponData.GetStatValue(Stat.CriticalDamage) * levelMultiplier; // Set the base critical hit damage from the weapon data
+        m_baseDamage = calculatedBaseStats[Stat.Attack].value; // Set the base damage from the weapon data
+        m_baseAttackFrequency = calculatedBaseStats[Stat.AttackSpeed].value; // Set the attack frequency from the weapon data
+        m_baseAttackRange = calculatedBaseStats[Stat.Range].value; // Set the base attack range from the weapon data
+        m_baseCriticalHitChance = calculatedBaseStats[Stat.CriticalChance].value; // Set the base critical hit chance from the weapon data
+        m_baseCriticalPercent = calculatedBaseStats[Stat.CriticalDamage].value; // Set the base critical hit damage from the weapon data
     }
 
     public void UpdateStats(PlayerStatManager playerStatManager)
@@ -184,6 +172,11 @@ public abstract class Weapon : MonoBehaviour, IPlayerStatsDependency
             float addedAttackRange = 1 + (playerStatManager.GetStatValue(Stat.Range) / 100f);
             m_currentAttackRange = m_baseAttackRange * addedAttackRange; // Set the attack range from the weapon data
         }
+        else if (m_weaponData.Prefab.GetType() == typeof(MeleeWeapon))
+        {
+            m_currentAttackRange = m_baseAttackRange; // Set the attack range from the weapon data
+        }
+
         m_enemyDetectionRange = m_currentAttackRange; // Set the enemy detection range to the attack range
 
         float addedCriticalHitChance = 1 + (playerStatManager.GetStatValue(Stat.CriticalChance) / 100f);

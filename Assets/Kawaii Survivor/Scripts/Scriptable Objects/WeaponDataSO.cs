@@ -40,7 +40,7 @@ public class WeaponDataSO : ScriptableObject
     {
         if (BaseStats.TryGetValue(stat, out StatData statData))
         {
-            return statData.m_value;
+            return statData.value;
         }
         else
         {

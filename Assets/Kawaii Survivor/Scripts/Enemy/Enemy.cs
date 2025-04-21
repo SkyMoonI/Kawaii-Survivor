@@ -121,7 +121,13 @@ public abstract class Enemy : MonoBehaviour
     {
         onEnemyDeath?.Invoke(transform.position); // Notify that the enemy has died
 
+        PassAwayAfterWave();
+    }
+
+    public void PassAwayAfterWave()
+    {
         PlayDeathEffect(); // play the death effect
+
         Destroy(gameObject); // destroy the enemy when it is close to player
     }
 

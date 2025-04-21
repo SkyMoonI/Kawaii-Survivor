@@ -54,7 +54,7 @@ public class PlayerStatManager : MonoBehaviour
 
     public float GetStatValue(Stat stat)
     {
-        return m_playerStats[stat].m_value + m_addends[stat].m_value; // Calculate the total value of the stat;
+        return m_playerStats[stat].value + m_addends[stat].value; // Calculate the total value of the stat;
     }
 
     private void UpdatePlayerStats()
@@ -72,32 +72,32 @@ public class PlayerStatManager : MonoBehaviour
 
 public struct StatData
 {
-    public Stat m_stat;
-    public float m_value;
+    public Stat stat;
+    public float value;
 
     public StatData(Stat stat, float value)
     {
-        m_stat = stat;
-        m_value = value;
+        this.stat = stat;
+        this.value = value;
     }
 
     public static StatData operator +(StatData stat1, StatData stat2)
     {
-        if (stat1.m_stat != stat2.m_stat)
+        if (stat1.stat != stat2.stat)
         {
             Debug.LogError("Cannot add StatData with different stats.");
             return stat1;
         }
-        return new StatData(stat1.m_stat, stat1.m_value + stat2.m_value);
+        return new StatData(stat1.stat, stat1.value + stat2.value);
     }
 
     public static StatData operator -(StatData stat1, StatData stat2)
     {
-        if (stat1.m_stat != stat2.m_stat)
+        if (stat1.stat != stat2.stat)
         {
             Debug.LogError("Cannot subtract StatData with different stats.");
             return stat1;
         }
-        return new StatData(stat1.m_stat, stat1.m_value - stat2.m_value);
+        return new StatData(stat1.stat, stat1.value - stat2.value);
     }
 }

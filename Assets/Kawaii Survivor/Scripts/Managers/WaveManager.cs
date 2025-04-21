@@ -124,11 +124,9 @@ public class WaveManager : MonoBehaviour, IGameStateListener
 
     private void DefeatAllEnemies()
     {
-        while (transform.childCount > 0)
+        foreach (Enemy enemy in transform.GetComponentsInChildren<Enemy>())
         {
-            Transform child = transform.GetChild(0); // Get the first child (enemy)
-            child.SetParent(null); // Unparent the enemy from the wave manager
-            Destroy(child.gameObject); // Destroy the enemy game object
+            enemy.PassAwayAfterWave(); // Call the PassAway method on each enemy to defeat them
         }
     }
 

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public static class TransformExtensions
-{    
+{
     /// <summary>
     /// Destroys all of the transform's children
     /// </summary>

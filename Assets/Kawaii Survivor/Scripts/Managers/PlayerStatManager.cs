@@ -12,6 +12,8 @@ public class PlayerStatManager : MonoBehaviour
     [Header("Settings")]
     private Dictionary<Stat, StatData> m_playerStats = new Dictionary<Stat, StatData>();
     private Dictionary<Stat, StatData> m_addends = new Dictionary<Stat, StatData>();
+    private Dictionary<Stat, float> m_objectAddends = new Dictionary<Stat, float>();
+
 
     void Awake()
     {
@@ -29,6 +31,7 @@ public class PlayerStatManager : MonoBehaviour
         foreach (KeyValuePair<Stat, StatData> stat in m_playerStats) // Initialize player stats from character data
         {
             m_addends.Add(stat.Key, new StatData(stat.Key, 0)); // Initialize addends to zero
+            m_objectAddends.Add(stat.Key, 0);
         }
     }
 
@@ -52,9 +55,19 @@ public class PlayerStatManager : MonoBehaviour
         UpdatePlayerStats();
     }
 
+    public void AddObjectStat(Dictionary<Stat, float> objectStats)
+    {
+        foreach (KeyValuePair<Stat, float> stat in objectStats) // Initialize player stats from character data
+        {
+            m_objectAddends[stat.Key] += stat.Value; // Initialize addends to zero
+        }
+
+        UpdatePlayerStats();
+    }
+
     public float GetStatValue(Stat stat)
     {
-        return m_playerStats[stat].value + m_addends[stat].value; // Calculate the total value of the stat;
+        return m_playerStats[stat].value + m_addends[stat].value + m_objectAddends[stat]; // Calculate the total value of the stat;
     }
 
     private void UpdatePlayerStats()
@@ -69,7 +82,7 @@ public class PlayerStatManager : MonoBehaviour
         }
     }
 }
-
+[System.Serializable]
 public struct StatData
 {
     public Stat stat;

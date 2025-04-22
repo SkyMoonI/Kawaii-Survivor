@@ -11,13 +11,13 @@ public abstract class DroppableCurrency : MonoBehaviour, ICollectable
         m_isCollected = false; // reset the flag when the object is enabled
     }
 
-    public void Collect(Player player)
+    public void Collect()
     {
         if (m_isCollected) return; // check if the candy is already collected
 
         m_isCollected = true; // set the flag to true
 
-        StartCoroutine(MoveTowardsPlayer(player)); // start the collect routine
+        StartCoroutine(MoveTowardsPlayer(Player.Instance)); // start the collect routine
 
     }
 

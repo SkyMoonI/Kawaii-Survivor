@@ -63,7 +63,7 @@ public class WeaponSelectionManager : MonoBehaviour, IGameStateListener
         int level = Random.Range(0, 4); // Randomly select a level between 0 and 3
 
         // Configure the container with the weapon data
-        container.Configure(weaponData.Sprite, weaponData.Name, level, weaponData); // Replace with actual weapon data
+        container.Configure(weaponData, level); // Replace with actual weapon data
 
         container.Button.onClick.RemoveAllListeners(); // Remove all listeners from the button
         container.Button.onClick.AddListener(() => ContainerSelectedCallback(container, weaponData, level)); // Add a new listener to handle button clicks

@@ -7,7 +7,7 @@ using System.Linq;
 public class WeaponDataSO : ScriptableObject
 {
     [field: SerializeField] public string Name { get; private set; } // Character name
-    [field: SerializeField] public Sprite Sprite { get; private set; } // Character sprite
+    [field: SerializeField] public Sprite IconSprite { get; private set; } // Character sprite
     [field: SerializeField] public int PurchasePrice { get; private set; } // Character purchase price
     [field: SerializeField] public Weapon Prefab { get; private set; } // Character level
 

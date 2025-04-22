@@ -25,14 +25,10 @@ public class WeaponSelectionContainer : MonoBehaviour
     [Header("Colors")]
     [SerializeField] private Image[] m_levelDependentImages; // Array to hold level-dependent colors
 
-    public void Configure(Sprite icon, string name, int level, WeaponDataSO weaponDataSO)
+    public void Configure(WeaponDataSO weaponData, int level)
     {
-        m_icon.sprite = icon;
-        m_nameText.text = $"{name}\n(lvl {level + 1})"; // Set the name text to include the level
-
-        //m_icon.SetNativeSize(); // Set the icon size to its native size
-        //
-        //m_icon.rectTransform.sizeDelta = m_icon.rectTransform.sizeDelta * (3f / 4f); // Set the icon size to 3/4 of its native size
+        m_icon.sprite = weaponData.IconSprite;
+        m_nameText.text = $"{weaponData.Name}\n(lvl {level + 1})"; // Set the name text to include the level
 
         Color imageColor = ColorHolder.Instance.GetColor(level); // Get the color from the ColorHolder singleton
         m_nameText.color = imageColor; // Set the name text color to the level-dependent color
@@ -45,11 +41,11 @@ public class WeaponSelectionContainer : MonoBehaviour
             image.color = imageColor; // Set the color of each image in the array to the level-dependent color
         }
 
-        Dictionary<Stat, StatData> calculatedBaseStats = WeaponStatsCalculator.GetStats(weaponDataSO, level); // Get the stats for the weapon data and level
+        Dictionary<Stat, float> calculatedBaseStats = WeaponStatsCalculator.GetStats(weaponData, level); // Get the stats for the weapon data and level
         ConfigureStatContainers(calculatedBaseStats); // Configure the stat containers with the weapon data
     }
 
-    private void ConfigureStatContainers(Dictionary<Stat, StatData> calculatedBaseStats)
+    private void ConfigureStatContainers(Dictionary<Stat, float> calculatedBaseStats)
     {
         StatContainerManager.GenerateStatContainers(calculatedBaseStats, m_statContainersParent); // Generate the stat containers using the StatContainerManager
     }

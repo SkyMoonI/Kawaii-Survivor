@@ -20,11 +20,11 @@ public class StatContainerManager : MonoBehaviour
         }
     }
 
-    private void GenerateContainers(Dictionary<Stat, StatData> baseStats, Transform parent)
+    private void GenerateContainers(Dictionary<Stat, float> baseStats, Transform parent)
     {
         List<StatContainer> statContainers = new List<StatContainer>(); // List to hold the stat containers
 
-        foreach (KeyValuePair<Stat, StatData> stat in baseStats) // Iterate through the base stats of the weapon data
+        foreach (KeyValuePair<Stat, float> stat in baseStats) // Iterate through the base stats of the weapon data
         {
             StatContainer statContainer = Instantiate(m_statContainerPrefab, parent); // Instantiate the stat container prefab
 
@@ -32,7 +32,7 @@ public class StatContainerManager : MonoBehaviour
 
             Sprite icon = ResourcesManager.GetStatIcon(stat.Key); // Get the icon for the stat from the ResourcesManager
             string name = Enums.FormatStatName(stat.Key); // Format the stat name using the Enums class
-            string value = stat.Value.value.ToString("F2"); // Get the value of the stat as a string
+            string value = stat.Value.ToString("F2"); // Get the value of the stat as a string
 
             statContainer.Configure(icon, name, value); // Configure the stat container
         }
@@ -59,7 +59,7 @@ public class StatContainerManager : MonoBehaviour
 
     }
 
-    public static void GenerateStatContainers(Dictionary<Stat, StatData> calculatedBaseStats, Transform parent)
+    public static void GenerateStatContainers(Dictionary<Stat, float> calculatedBaseStats, Transform parent)
     {
         if (Instance == null) // Check if the instance is null
         {

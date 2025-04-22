@@ -6,22 +6,106 @@ using NaughtyAttributes;
 
 public class WaveTransitionManager : MonoBehaviour, IGameStateListener
 {
+    public static WaveTransitionManager Instance { get; private set; } // Singleton instance of the WaveTransitionManager
+
+    [Header("Elements")]
+    [SerializeField] private PlayerObjects m_playerObjects; // Reference to the player objects
+
     [Header("Settings")]
     [SerializeField] private UpgradeContainer[] m_upgradeContainers; // Array of buttons for upgrades
+    [SerializeField] private Transform m_upgradeContainersParent; // Parent transform for the chest object container
+    private int m_chestCollectedCount; // Number of chests collected
+
+    [Header("Chest Container Settings")]
+    [SerializeField] private ChestObjectContainer m_chestObjectContainerPrefab; // Reference to the chest object
+    [SerializeField] private Transform m_chestContainersParent; // Parent transform for the chest object container
+
+    void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this; // Set the singleton instance
+        }
+        else
+        {
+            Destroy(gameObject); // Destroy duplicate instances
+        }
+    }
+    void OnEnable()
+    {
+        Chest.onCollected += ChestCollectedCallBack; // Subscribe to the chest collected event
+    }
+    void OnDisable()
+    {
+        Chest.onCollected -= ChestCollectedCallBack; // Unsubscribe from the chest collected event
+    }
+    void OnDestroy()
+    {
+        Chest.onCollected -= ChestCollectedCallBack; // Unsubscribe from the chest collected event
+    }
 
     public void GameStateChangedCallBack(GameState gameState)
     {
         switch (gameState)
         {
             case GameState.WAVETRANSITION:
-                ConfigureUpgradeContainers(); // Show upgrade containers when transitioning to the wave
+                TryOpenChest();
                 break;
         }
+    }
+
+    private void TryOpenChest()
+    {
+        m_chestContainersParent.Clear();
+
+        if (m_chestCollectedCount > 0)
+        {
+            ShowObject();
+        }
+        else
+        {
+            ConfigureUpgradeContainers(); // Show upgrade containers when transitioning to the wave
+        }
+    }
+
+    private void ShowObject()
+    {
+        m_upgradeContainersParent.gameObject.SetActive(false);
+
+        m_chestCollectedCount--;
+
+        ObjectDataSO[] objectDatas = ResourcesManager.Objects; // Get all object data from the resources manager
+        ObjectDataSO randomObjectData = objectDatas[UnityEngine.Random.Range(0, objectDatas.Length)]; // Randomly select an object data
+
+        ChestObjectContainer chestObjectContainer = Instantiate(m_chestObjectContainerPrefab, m_chestContainersParent); // Instantiate the chest object container prefab
+        chestObjectContainer.Configure(randomObjectData); // Configure the chest object container with the random object data
+
+        chestObjectContainer.TakeButton.onClick.RemoveAllListeners(); // Remove all listeners from the button
+        chestObjectContainer.TakeButton.onClick.AddListener(() => TakeButtonCallback(randomObjectData)); // Add a new listener to handle button clicks
+
+        chestObjectContainer.RecycleButton.onClick.RemoveAllListeners(); // Remove all listeners from the button
+        chestObjectContainer.RecycleButton.onClick.AddListener(() => RecycleButtonCallback(randomObjectData)); // Add a new listener to handle button clicks
+    }
+
+    private void TakeButtonCallback(ObjectDataSO objectData)
+    {
+        m_playerObjects.AddObject(objectData); // Add the object to the player objects
+
+        TryOpenChest(); // Try to open the next chest
+    }
+
+    private void RecycleButtonCallback(ObjectDataSO objectData)
+    {
+        CurrencyManager.Instance.AddCurrency(objectData.RecyclePrice); // Add currency to the player based on the recycle value of the object data
+
+        TryOpenChest(); // Try to open the next chest
     }
 
     [Button()]
     private void ConfigureUpgradeContainers()
     {
+        m_upgradeContainersParent.gameObject.SetActive(true); // Show the upgrade containers
+
         for (int i = 0; i < m_upgradeContainers.Length; i++)
         {
             int randomUpgradeIndex = UnityEngine.Random.Range(0, Enum.GetValues(typeof(Stat)).Length); // Randomly select an upgrade type
@@ -108,5 +192,22 @@ public class WaveTransitionManager : MonoBehaviour, IGameStateListener
         {
             PlayerStatManager.Instance.AddPlayerStat(stat, value); // Add the selected stat to the player stat manager
         };
+    }
+
+    private void ChestCollectedCallBack(Chest chest)
+    {
+        m_chestCollectedCount++; // Increment the chest collect count
+    }
+
+    public bool HasChestCollected()
+    {
+        if (m_chestCollectedCount > 0)
+        {
+            return true; // Return true if there are chests collected
+        }
+        else
+        {
+            return false; // Return false if there are no chests collected
+        }
     }
 }

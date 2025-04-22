@@ -146,13 +146,13 @@ public abstract class Weapon : MonoBehaviour, IPlayerStatsDependency
 
     private void ConfigureStats()
     {
-        Dictionary<Stat, StatData> calculatedBaseStats = WeaponStatsCalculator.GetStats(m_weaponData, m_level); // Get the stats from the weapon data
+        Dictionary<Stat, float> calculatedBaseStats = WeaponStatsCalculator.GetStats(m_weaponData, m_level); // Get the stats from the weapon data
 
-        m_baseDamage = calculatedBaseStats[Stat.Attack].value; // Set the base damage from the weapon data
-        m_baseAttackFrequency = calculatedBaseStats[Stat.AttackSpeed].value; // Set the attack frequency from the weapon data
-        m_baseAttackRange = calculatedBaseStats[Stat.Range].value; // Set the base attack range from the weapon data
-        m_baseCriticalHitChance = calculatedBaseStats[Stat.CriticalChance].value; // Set the base critical hit chance from the weapon data
-        m_baseCriticalPercent = calculatedBaseStats[Stat.CriticalDamage].value; // Set the base critical hit damage from the weapon data
+        m_baseDamage = calculatedBaseStats[Stat.Attack]; // Set the base damage from the weapon data
+        m_baseAttackFrequency = calculatedBaseStats[Stat.AttackSpeed]; // Set the attack frequency from the weapon data
+        m_baseAttackRange = calculatedBaseStats[Stat.Range]; // Set the base attack range from the weapon data
+        m_baseCriticalHitChance = calculatedBaseStats[Stat.CriticalChance]; // Set the base critical hit chance from the weapon data
+        m_baseCriticalPercent = calculatedBaseStats[Stat.CriticalDamage]; // Set the base critical hit damage from the weapon data
     }
 
     public void UpdateStats(PlayerStatManager playerStatManager)

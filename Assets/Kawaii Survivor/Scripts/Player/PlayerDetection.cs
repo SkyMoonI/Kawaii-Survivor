@@ -15,7 +15,7 @@ public class PlayerDetection : MonoBehaviour
                 return;
             }
 
-            collectable.Collect(GetComponent<Player>()); // collect the candy
+            collectable.Collect(); // collect the candy
         }
     }
 }

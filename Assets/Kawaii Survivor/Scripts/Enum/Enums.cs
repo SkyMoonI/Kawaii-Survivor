@@ -18,7 +18,7 @@ public enum Stat
     MoveSpeed,
     MaxHealth,
     Range,
-    HealthRegenation,
+    HealthRegeneration,
     Armor,
     Luck,
     Dodge,

@@ -11,6 +11,7 @@ public class ChestObjectContainer : MonoBehaviour
     [SerializeField] private Image m_outline; // Outline image for the upgrade container
     [SerializeField] private Button m_takeButton; // Button component for the upgrade container
     [SerializeField] private Button m_recycleButton; // Button component for the upgrade container
+    [SerializeField] private TMP_Text m_recyclePriceText; // Icon for the recycle button
 
     [Header("Stats")]
     [SerializeField] private Transform m_statContainersParent;
@@ -26,10 +27,7 @@ public class ChestObjectContainer : MonoBehaviour
     {
         m_icon.sprite = objectData.IconSprite;
         m_nameText.text = $"{objectData.Name}"; // Set the name text to include the level
-
-        //m_icon.SetNativeSize(); // Set the icon size to its native size
-        //
-        //m_icon.rectTransform.sizeDelta = m_icon.rectTransform.sizeDelta * (3f / 4f); // Set the icon size to 3/4 of its native size
+        m_recyclePriceText.text = objectData.RecyclePrice.ToString(); // Set the recycle price text
 
         Color imageColor = ColorHolder.Instance.GetColor(objectData.Rarity); // Get the color from the ColorHolder singleton
         m_nameText.color = imageColor; // Set the name text color to the level-dependent color

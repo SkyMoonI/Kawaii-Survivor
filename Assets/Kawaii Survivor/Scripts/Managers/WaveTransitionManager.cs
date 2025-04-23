@@ -112,10 +112,12 @@ public class WaveTransitionManager : MonoBehaviour, IGameStateListener
             Stat upgradeType = (Stat)randomUpgradeIndex; // Cast the random index to Stat enum
             string upgradeText = Enums.FormatStatName(upgradeType); // Create the upgrade text based on the selected type
 
+            Sprite upgradeIconSprite = ResourcesManager.GetStatIcon(upgradeType); // Get the icon sprite for the selected upgrade type
+
             string buttonString;
             Action action = GetActionToPerform(upgradeType, out buttonString); // Get the action to perform on button click
 
-            m_upgradeContainers[i].Configure(null, upgradeText, buttonString); // Set the text for each upgrade container
+            m_upgradeContainers[i].Configure(upgradeIconSprite, upgradeText, buttonString); // Set the text for each upgrade container
 
             m_upgradeContainers[i].Button.onClick.RemoveAllListeners(); // Remove all listeners from the button
             m_upgradeContainers[i].Button.onClick.AddListener(() => action?.Invoke()); // Add a new listener to handle button clicks
@@ -163,7 +165,7 @@ public class WaveTransitionManager : MonoBehaviour, IGameStateListener
                 value = UnityEngine.Random.Range(1f, 5f); // Randomly select a value for the range upgrade
                 buttonString = "+" + value.ToString("F2"); // Initialize button string
                 break;
-            case Stat.HealthRegenation:
+            case Stat.HealthRegeneration:
                 value = UnityEngine.Random.Range(1, 10); // Randomly select a value for the HealthRecoverySpeed upgrade
                 buttonString = "+" + value.ToString() + "%"; // Initialize button string
                 break;

@@ -36,7 +36,7 @@ public class CharacterDataSO : ScriptableObject
                 {Stat.MoveSpeed, new StatData(Stat.MoveSpeed, m_moveSpeed)},
                 {Stat.MaxHealth, new StatData(Stat.MaxHealth, m_maxHealth)},
                 {Stat.Range, new StatData(Stat.Range, m_range)},
-                {Stat.HealthRegenation, new StatData(Stat.HealthRegenation, m_healthRecoverySpeed)},
+                {Stat.HealthRegeneration, new StatData(Stat.HealthRegeneration, m_healthRecoverySpeed)},
                 {Stat.Armor, new StatData(Stat.Armor, m_armor)},
                 {Stat.Luck, new StatData(Stat.Luck, m_luck)},
                 {Stat.Dodge, new StatData(Stat.Dodge, m_dodge)},

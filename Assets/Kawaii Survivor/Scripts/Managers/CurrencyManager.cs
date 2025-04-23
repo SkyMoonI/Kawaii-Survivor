@@ -20,8 +20,24 @@ public class CurrencyManager : MonoBehaviour
         }
     }
 
+    void Start()
+    {
+        UpdateCurrencyTexts(); // Update the currency text at the start
+    }
+
     public void AddCurrency(int amount) // Method to add currency
     {
         Currency += amount; // Increase the currency amount
+        UpdateCurrencyTexts();
+    }
+
+    private void UpdateCurrencyTexts()
+    {
+        CurrencyText[] currencyTexts = FindObjectsByType<CurrencyText>(FindObjectsInactive.Include, FindObjectsSortMode.None); // Find all CurrencyText components in the scene
+
+        foreach (CurrencyText currencyText in currencyTexts) // Loop through each CurrencyText component
+        {
+            currencyText.UpdateCurrencyText(Currency); // Update the currency text with the current currency amount
+        }
     }
 }

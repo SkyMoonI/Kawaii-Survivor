@@ -101,7 +101,7 @@ public class PlayerHealth : MonoBehaviour, IPlayerStatsDependency
         float addedDodgeChance = playerStatManager.GetStatValue(Stat.Dodge); // Get the added dodge chance from the stat manager
         m_currentDodgeChance = m_baseDodgeChance + addedDodgeChance; // Calculate the new dodge chance value
 
-        float addedHealthRegen = playerStatManager.GetStatValue(Stat.HealthRegenation); // Get the added health regen from the stat manager
+        float addedHealthRegen = playerStatManager.GetStatValue(Stat.HealthRegeneration); // Get the added health regen from the stat manager
         m_currentHealthRegenAmount = m_baseHealthRegenAmount + addedHealthRegen; // Calculate the new health regen value
     }
 

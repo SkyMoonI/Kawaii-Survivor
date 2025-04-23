@@ -73,7 +73,7 @@ public class PlayerStatManager : MonoBehaviour
     private void UpdatePlayerStats()
     {
         IEnumerable<IPlayerStatsDependency> playerStatsDependencies =
-        FindObjectsByType<MonoBehaviour>(FindObjectsSortMode.None)
+        FindObjectsByType<MonoBehaviour>(FindObjectsInactive.Include, FindObjectsSortMode.None)
         .OfType<IPlayerStatsDependency>(); // Find all listeners in the scene
 
         foreach (IPlayerStatsDependency dependency in playerStatsDependencies)

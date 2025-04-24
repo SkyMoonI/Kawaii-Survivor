@@ -25,7 +25,7 @@ public class WeaponSelectionManager : MonoBehaviour, IGameStateListener
                     return;
                 }
 
-                m_playerWeapons.AddWeapon(m_selectedWeapon, initialWeaponLevel);
+                m_playerWeapons.TryAddWeapon(m_selectedWeapon, initialWeaponLevel);
                 initialWeaponLevel = 0;
                 m_selectedWeapon = null; // Reset the selected weapon after adding it to the player weapons
 

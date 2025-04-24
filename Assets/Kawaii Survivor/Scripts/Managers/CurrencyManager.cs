@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class CurrencyManager : MonoBehaviour
@@ -7,6 +8,10 @@ public class CurrencyManager : MonoBehaviour
     [Header("Settings")]
     [SerializeField] private int m_currency; // Player's currency amount
     public int Currency { get { return m_currency; } private set { m_currency = value; } } // Currency earned per wave
+
+
+    [Header("Actions")]
+    public static Action onUpdated;
 
     void Awake()
     {
@@ -29,6 +34,14 @@ public class CurrencyManager : MonoBehaviour
     {
         Currency += amount; // Increase the currency amount
         UpdateCurrencyTexts();
+        onUpdated?.Invoke();
+    }
+
+    public void UseCurrency(int amount) // Method to use currency
+    {
+        Currency -= amount;
+        UpdateCurrencyTexts();
+        onUpdated?.Invoke();
     }
 
     private void UpdateCurrencyTexts()
@@ -40,4 +53,10 @@ public class CurrencyManager : MonoBehaviour
             currencyText.UpdateCurrencyText(Currency); // Update the currency text with the current currency amount
         }
     }
+
+    public bool HasEnoughCurrency(int amount) // Method to check if the player has enough currency
+    {
+        return Currency >= amount;
+    }
+
 }

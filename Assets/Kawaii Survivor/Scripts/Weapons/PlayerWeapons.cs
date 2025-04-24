@@ -5,8 +5,17 @@ public class PlayerWeapons : MonoBehaviour
 {
     [SerializeField] private WeaponPosition[] m_weaponPositions; // Array of weapon positions
 
-    public void AddWeapon(WeaponDataSO weaponData, int weaponLevel)
+    public bool TryAddWeapon(WeaponDataSO weaponData, int weaponLevel) // Method to try to add a weapon to the player's inventory
     {
-        m_weaponPositions[Random.Range(0, m_weaponPositions.Length)].AssignWeapon(weaponData.Prefab, weaponLevel); // Add the weapon to a random position
+        for (int i = 0; i < m_weaponPositions.Length; i++) // Iterate through the weapon positions
+        {
+            if (m_weaponPositions[i].Weapon == null) // If the weapon position is empty
+            {
+                m_weaponPositions[i].AssignWeapon(weaponData.Prefab, weaponLevel); // Add the weapon to the position
+                return true;
+            }
+        }
+
+        return false;
     }
 }

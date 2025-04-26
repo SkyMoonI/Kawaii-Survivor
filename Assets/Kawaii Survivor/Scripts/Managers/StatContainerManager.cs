@@ -66,6 +66,7 @@ public class StatContainerManager : MonoBehaviour
             Debug.LogError("StatContainerManager instance is null. Make sure it is initialized before calling this method."); // Log an error if the instance is null
             return; // Exit the method if the instance is null
         }
+        parent.Clear(); // Destroy all the children of the stat containers parent container before generating new ones
 
         Instance.GenerateContainers(calculatedBaseStats, parent); // Call the GenerateStatContainers method on the singleton instance
     }

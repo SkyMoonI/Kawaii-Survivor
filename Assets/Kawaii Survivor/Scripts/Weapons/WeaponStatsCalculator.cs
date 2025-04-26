@@ -30,4 +30,11 @@ public static class WeaponStatsCalculator
 
         return (int)(weaponData.PurchasePrice * multiplier); // Calculate the purchase price based on the weapon data and level
     }
+
+    public static int GetRecyclePrice(WeaponDataSO weaponData, int level)
+    {
+        float multiplier = 1 + (level / 3f); // Calculate the level multiplier based on the weapon level
+
+        return (int)(weaponData.RecyclePrice * multiplier); // Calculate the purchase price based on the weapon data and level
+    }
 }

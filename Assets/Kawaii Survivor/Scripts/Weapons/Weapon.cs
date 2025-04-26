@@ -7,6 +7,7 @@ public abstract class Weapon : MonoBehaviour, IPlayerStatsDependency
 {
     [Header("Scriptable Objects")]
     [field: SerializeField] private WeaponDataSO m_weaponData; // Reference to weapon data scriptable object 
+    public WeaponDataSO WeaponData => m_weaponData;
 
     [Header("Settings")]
     protected float m_enemyDetectionRange;
@@ -39,6 +40,7 @@ public abstract class Weapon : MonoBehaviour, IPlayerStatsDependency
 
     [Header("Leveling")]
     [SerializeField] protected int m_level; // Current level of the weapon
+    public int Level => m_level;
 
     [Header("DEBUG")]
     [SerializeField] protected bool m_isGizmosEnabled;

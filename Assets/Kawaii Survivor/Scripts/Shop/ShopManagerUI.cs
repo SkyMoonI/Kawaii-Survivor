@@ -22,9 +22,7 @@ public class ShopManagerUI : MonoBehaviour
 
     [Header("Item Info Slide Panel Elements")]
     [SerializeField] private RectTransform m_playerItemInfoPanel;
-    [SerializeField] private RectTransform m_playerItemInfoClosePanel;
-    [SerializeField] private Button m_playerItemInfoOpenButton;
-    [SerializeField] private EventTrigger m_playerItemInfoCloseButton;
+    [SerializeField] private Button m_playerItemInfoCloseButton;
     private Vector2 m_playerItemInfoPanelOpenPosition;
     private Vector2 m_playerItemInfoPanelClosedPosition;
 
@@ -54,6 +52,9 @@ public class ShopManagerUI : MonoBehaviour
         m_playerInventoryCloseButton.triggers.Add(inventoryEntry);
         m_playerInventoryCloseButton.enabled = true; // Ensure the Event Trigger is enabled
 
+        m_playerItemInfoCloseButton.onClick.RemoveAllListeners();
+        m_playerItemInfoCloseButton.onClick.AddListener(HideItemInfo);
+
     }
 
     void OnDisable()
@@ -63,6 +64,8 @@ public class ShopManagerUI : MonoBehaviour
 
         m_playerStatsCloseButton.triggers.Clear();
         m_playerInventoryCloseButton.triggers.Clear();
+
+        m_playerItemInfoCloseButton.onClick.RemoveAllListeners();
     }
 
     void OnDestroy()
@@ -72,6 +75,8 @@ public class ShopManagerUI : MonoBehaviour
 
         m_playerStatsCloseButton.triggers.Clear();
         m_playerInventoryCloseButton.triggers.Clear();
+
+        m_playerItemInfoCloseButton.onClick.RemoveAllListeners();
     }
 
     private void ConfigurePlayerStatsPanel()
@@ -80,6 +85,8 @@ public class ShopManagerUI : MonoBehaviour
         m_playerStatsPanelClosedPosition = -m_playerStatsPanelOpenPosition;
 
         m_playerStatsPanel.anchoredPosition = m_playerStatsPanelClosedPosition;
+
+        HidePlayerPanel(m_playerStatsPanel, m_playerStatsClosePanel, m_playerStatsPanelClosedPosition);
     }
 
     private void ConfigurePlayerInventoryPanel()
@@ -88,6 +95,8 @@ public class ShopManagerUI : MonoBehaviour
         m_playerInventoryPanelClosedPosition = -m_playerInventoryPanelOpenPosition;
 
         m_playerInventoryPanel.anchoredPosition = m_playerInventoryPanelClosedPosition;
+
+        HidePlayerPanel(m_playerInventoryPanel, m_playerInventoryClosePanel, m_playerInventoryPanelClosedPosition);
     }
 
     private void ConfigurePlayerItemInfoPanel()
@@ -96,6 +105,8 @@ public class ShopManagerUI : MonoBehaviour
         m_playerItemInfoPanelClosedPosition = -m_playerItemInfoPanelOpenPosition;
 
         m_playerItemInfoPanel.anchoredPosition = m_playerItemInfoPanelClosedPosition;
+
+        HideItemInfo();
     }
 
     private void ShowPlayerPanel(RectTransform playerPanel, RectTransform closePanel, Vector2 panelOpenPosition)
@@ -110,7 +121,6 @@ public class ShopManagerUI : MonoBehaviour
 
         LeanTween.cancel(closePanel);
         LeanTween.alpha(closePanel, .8f, 0.5f).setRecursive(false);
-
     }
 
     private void HidePlayerPanel(RectTransform playerPanel, RectTransform closePanel, Vector2 panelClosePosition)
@@ -127,5 +137,27 @@ public class ShopManagerUI : MonoBehaviour
         LeanTween.alpha(closePanel, .0f, 0.5f)
         .setRecursive(false)
         .setOnComplete(() => { closePanel.gameObject.SetActive(false); });
+
+        if (m_playerItemInfoPanel.gameObject.activeSelf)
+        {
+            HideItemInfo();
+        }
+    }
+
+    public void ShowItemInfo()
+    {
+        m_playerItemInfoPanel.gameObject.SetActive(true);
+
+        m_playerItemInfoPanel.LeanCancel();
+        m_playerItemInfoPanel.LeanMove((Vector3)m_playerItemInfoPanelOpenPosition, 0.3f)
+        .setEase(LeanTweenType.easeInCubic);
+    }
+
+    public void HideItemInfo()
+    {
+        m_playerItemInfoPanel.LeanCancel();
+        m_playerItemInfoPanel.LeanMove((Vector3)m_playerItemInfoPanelClosedPosition, 0.3f)
+        .setEase(LeanTweenType.easeInCubic)
+        .setOnComplete(() => { m_playerItemInfoPanel.gameObject.SetActive(false); });
     }
 }

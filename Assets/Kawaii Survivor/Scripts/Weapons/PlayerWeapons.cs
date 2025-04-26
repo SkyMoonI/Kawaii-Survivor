@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.PlayerLoop;
 
@@ -17,5 +18,20 @@ public class PlayerWeapons : MonoBehaviour
         }
 
         return false;
+    }
+
+    public Weapon[] GetWeapons()
+    {
+        List<Weapon> weapons = new List<Weapon>(); // List to hold the weapons
+
+        foreach (WeaponPosition weaponPosition in m_weaponPositions) // Iterate through the weapon positions
+        {
+            if (weaponPosition.Weapon != null) // If the weapon position has a weapon
+            {
+                weapons.Add(weaponPosition.Weapon); // Add the weapon to the list
+            }
+        }
+
+        return weapons.ToArray(); // Return the array of weapons
     }
 }

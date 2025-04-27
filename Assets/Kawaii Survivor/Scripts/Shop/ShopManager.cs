@@ -19,6 +19,9 @@ public class ShopManager : MonoBehaviour, IGameStateListener
     [SerializeField] private PlayerWeapons m_playerWeapons;
     [SerializeField] private PlayerObjects m_playerObjects;
 
+    [Header("Actions")]
+    public static Action onItemPurchased;
+
 
     void OnEnable()
     {
@@ -123,6 +126,7 @@ public class ShopManager : MonoBehaviour, IGameStateListener
         {
             PurchaseObject(shopItemContainer);
         }
+
     }
 
     private void TryPurchaseWeapon(ShopItemContainer shopItemContainer, int weaponLevel)
@@ -133,6 +137,8 @@ public class ShopManager : MonoBehaviour, IGameStateListener
             CurrencyManager.Instance.UseCurrency(purchasePrice);
 
             Destroy(shopItemContainer.gameObject);
+
+            onItemPurchased?.Invoke();
         }
     }
 
@@ -144,5 +150,7 @@ public class ShopManager : MonoBehaviour, IGameStateListener
         CurrencyManager.Instance.UseCurrency(purchasePrice);
 
         Destroy(shopItemContainer.gameObject);
+
+        onItemPurchased?.Invoke();
     }
 }

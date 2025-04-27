@@ -16,6 +16,10 @@ public class InventoryItemInfo : MonoBehaviour
     [Header("Stats")]
     [SerializeField] private Transform m_statContainersParent;
 
+    [Header("Buttons")]
+    [field: SerializeField] public Button RecycleButton { get; private set; }
+    [SerializeField] private Button m_mergeButton;
+
     private void Configure(Sprite itemIcon, Color containerColor, string itemName, int recyclePrice, Dictionary<Stat, float> stats)
     {
         m_itemIcon.sprite = itemIcon;
@@ -34,6 +38,8 @@ public class InventoryItemInfo : MonoBehaviour
           objectData.Name,
            objectData.RecyclePrice,
             objectData.BaseStats);
+
+        m_mergeButton.gameObject.SetActive(false);
     }
 
     public void Configure(Weapon weapon)
@@ -43,6 +49,13 @@ public class InventoryItemInfo : MonoBehaviour
           weapon.WeaponData.Name + " (lvl " + (weapon.Level + 1) + ")",
            WeaponStatsCalculator.GetRecyclePrice(weapon.WeaponData, weapon.Level),
             WeaponStatsCalculator.GetStats(weapon.WeaponData, weapon.Level));
+
+        m_mergeButton.gameObject.SetActive(true);
+
+        m_mergeButton.interactable = WeaponMerger.Instance.CanMerge(weapon);
+
+        m_mergeButton.onClick.RemoveAllListeners();
+        m_mergeButton.onClick.AddListener(WeaponMerger.Instance.Merge);
     }
 
 

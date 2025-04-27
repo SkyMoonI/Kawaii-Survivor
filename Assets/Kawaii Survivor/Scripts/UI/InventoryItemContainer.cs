@@ -12,6 +12,7 @@ public class InventoryItemContainer : MonoBehaviour
     [Header("Settings")]
     public Weapon WeaponData { get; private set; }
     public ObjectDataSO ObjectData { get; private set; }
+    public int WeaponIndex { get; private set; }
 
     private void Configure(Sprite itemIcon, Color containerCOlor)
     {
@@ -19,9 +20,10 @@ public class InventoryItemContainer : MonoBehaviour
         m_containerImage.color = containerCOlor;
     }
 
-    public void Configure(Weapon weapon, Action clickedCallback)
+    public void Configure(Weapon weapon, int index, Action clickedCallback)
     {
         WeaponData = weapon;
+        WeaponIndex = index;
 
         Sprite iconSprite = weapon.WeaponData.IconSprite; // Get the icon sprite from the resources manager
         Color containerColor = ColorHolder.Instance.GetColor(weapon.Level);

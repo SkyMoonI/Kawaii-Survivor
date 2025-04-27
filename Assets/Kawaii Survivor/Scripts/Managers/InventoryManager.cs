@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class InventoryManager : MonoBehaviour, IGameStateListener
@@ -10,6 +11,25 @@ public class InventoryManager : MonoBehaviour, IGameStateListener
     [SerializeField] private ShopManagerUI m_shopManagerUI;
     [SerializeField] private InventoryItemInfo m_inventoryItemInfo;
 
+    void OnEnable()
+    {
+        ShopManager.onItemPurchased += ItemPurchasedCallback;
+        WeaponMerger.onMerge += WeaponMergedCallback;
+    }
+
+    void OnDisable()
+    {
+        ShopManager.onItemPurchased -= ItemPurchasedCallback;
+        WeaponMerger.onMerge -= WeaponMergedCallback;
+    }
+
+    void OnDestroy()
+    {
+        ShopManager.onItemPurchased -= ItemPurchasedCallback;
+        WeaponMerger.onMerge -= WeaponMergedCallback;
+    }
+
+
     public void GameStateChangedCallBack(GameState gameState)
     {
         switch (gameState)
@@ -20,7 +40,6 @@ public class InventoryManager : MonoBehaviour, IGameStateListener
         }
     }
 
-
     private void Configure()
     {
         m_inventoryItemsParent.Clear();
@@ -29,9 +48,15 @@ public class InventoryManager : MonoBehaviour, IGameStateListener
 
         for (int i = 0; i < weapons.Length; i++)
         {
+            // If the weapon is null, continue so that the null weapons are not added with the index
+            if (weapons[i] == null)
+            {
+                continue;
+            }
+
             InventoryItemContainer inventoryItemContainerInstance = Instantiate(m_inventoryItemContainer, m_inventoryItemsParent);
 
-            inventoryItemContainerInstance.Configure(weapons[i], () => ShowItemInfo(inventoryItemContainerInstance));
+            inventoryItemContainerInstance.Configure(weapons[i], i, () => ShowItemInfo(inventoryItemContainerInstance));
         }
 
         ObjectDataSO[] objectDatas = m_playerObjects.Objects.ToArray(); // Get all object data from the player objects
@@ -48,7 +73,7 @@ public class InventoryManager : MonoBehaviour, IGameStateListener
     {
         if (container.WeaponData != null)
         {
-            ShowWeaponInfo(container.WeaponData);
+            ShowWeaponInfo(container.WeaponData, container.WeaponIndex);
         }
         else
         {
@@ -56,17 +81,53 @@ public class InventoryManager : MonoBehaviour, IGameStateListener
         }
     }
 
-    private void ShowWeaponInfo(Weapon weapon)
+    private void ShowWeaponInfo(Weapon weapon, int index)
     {
         m_inventoryItemInfo.Configure(weapon);
 
+        m_inventoryItemInfo.RecycleButton.onClick.RemoveAllListeners();
+        m_inventoryItemInfo.RecycleButton.onClick.AddListener(() => RecycleWeapon(index));
+
         m_shopManagerUI.ShowItemInfo();
+    }
+
+    private void RecycleWeapon(int index)
+    {
+        m_playerWeapons.RecycleWeapon(index); // Recycle the weapon from the player weapons
+
+        Configure(); // Refresh the inventory
+
+        m_shopManagerUI.HideItemInfo(); // Hide the item info because the weapon has been recycled
     }
 
     private void ShowObjectInfo(ObjectDataSO objectData)
     {
         m_inventoryItemInfo.Configure(objectData);
 
+        m_inventoryItemInfo.RecycleButton.onClick.RemoveAllListeners();
+        m_inventoryItemInfo.RecycleButton.onClick.AddListener(() => RecycleObject(objectData));
+
         m_shopManagerUI.ShowItemInfo();
+    }
+
+    private void RecycleObject(ObjectDataSO objectData)
+    {
+        m_playerObjects.RecycleObject(objectData); // Recycle the object from the player objects
+
+        Configure(); // Refresh the inventory
+
+        m_shopManagerUI.HideItemInfo(); // Hide the item info because the object has been recycled
+    }
+
+    private void ItemPurchasedCallback()
+    {
+        Configure();
+    }
+
+    private void WeaponMergedCallback(Weapon weapon)
+    {
+        Configure();
+
+        m_inventoryItemInfo.Configure(weapon);
     }
 }

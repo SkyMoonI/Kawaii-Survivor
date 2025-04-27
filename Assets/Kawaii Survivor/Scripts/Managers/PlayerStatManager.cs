@@ -65,6 +65,16 @@ public class PlayerStatManager : MonoBehaviour
         UpdatePlayerStats();
     }
 
+    public void RemoveObjectStat(Dictionary<Stat, float> objectStats)
+    {
+        foreach (KeyValuePair<Stat, float> stat in objectStats) // Initialize player stats from character data
+        {
+            m_objectAddends[stat.Key] -= stat.Value; // Initialize addends to zero
+        }
+
+        UpdatePlayerStats();
+    }
+
     public float GetStatValue(Stat stat)
     {
         return m_playerStats[stat].value + m_addends[stat].value + m_objectAddends[stat]; // Calculate the total value of the stat;

@@ -3,11 +3,14 @@ using UnityEngine;
 
 public class InventoryManager : MonoBehaviour, IGameStateListener
 {
-    [Header("Elements")]
-    [SerializeField] private Transform m_inventoryItemsParent;
-    [SerializeField] private InventoryItemContainer m_inventoryItemContainer;
+    [Header("Player Elements")]
     [SerializeField] private PlayerObjects m_playerObjects;
     [SerializeField] private PlayerWeapons m_playerWeapons;
+
+    [Header("Elements")]
+    [SerializeField] private Transform m_inventoryItemsParent;
+    [SerializeField] private Transform m_pauseInventoryItemsParent;
+    [SerializeField] private InventoryItemContainer m_inventoryItemContainer;
     [SerializeField] private ShopManagerUI m_shopManagerUI;
     [SerializeField] private InventoryItemInfo m_inventoryItemInfo;
 
@@ -15,18 +18,24 @@ public class InventoryManager : MonoBehaviour, IGameStateListener
     {
         ShopManager.onItemPurchased += ItemPurchasedCallback;
         WeaponMerger.onMerge += WeaponMergedCallback;
+
+        GameManager.onGamePaused += Configure;
     }
 
     void OnDisable()
     {
         ShopManager.onItemPurchased -= ItemPurchasedCallback;
         WeaponMerger.onMerge -= WeaponMergedCallback;
+
+        GameManager.onGamePaused -= Configure;
     }
 
     void OnDestroy()
     {
         ShopManager.onItemPurchased -= ItemPurchasedCallback;
         WeaponMerger.onMerge -= WeaponMergedCallback;
+
+        GameManager.onGamePaused -= Configure;
     }
 
 
@@ -43,6 +52,7 @@ public class InventoryManager : MonoBehaviour, IGameStateListener
     private void Configure()
     {
         m_inventoryItemsParent.Clear();
+        m_pauseInventoryItemsParent.Clear();
 
         Weapon[] weapons = m_playerWeapons.GetWeapons(); // Get all weapons from the player weapons
 
@@ -55,8 +65,10 @@ public class InventoryManager : MonoBehaviour, IGameStateListener
             }
 
             InventoryItemContainer inventoryItemContainerInstance = Instantiate(m_inventoryItemContainer, m_inventoryItemsParent);
-
             inventoryItemContainerInstance.Configure(weapons[i], i, () => ShowItemInfo(inventoryItemContainerInstance));
+
+            InventoryItemContainer pauseInventoryItemContainerInstance = Instantiate(m_inventoryItemContainer, m_pauseInventoryItemsParent);
+            pauseInventoryItemContainerInstance.Configure(weapons[i], i, null);
         }
 
         ObjectDataSO[] objectDatas = m_playerObjects.Objects.ToArray(); // Get all object data from the player objects
@@ -64,8 +76,10 @@ public class InventoryManager : MonoBehaviour, IGameStateListener
         for (int i = 0; i < objectDatas.Length; i++)
         {
             InventoryItemContainer inventoryItemContainerInstance = Instantiate(m_inventoryItemContainer, m_inventoryItemsParent);
-
             inventoryItemContainerInstance.Configure(objectDatas[i], () => ShowItemInfo(inventoryItemContainerInstance));
+
+            InventoryItemContainer pauseInventoryItemContainerInstance = Instantiate(m_inventoryItemContainer, m_pauseInventoryItemsParent);
+            pauseInventoryItemContainerInstance.Configure(objectDatas[i], null);
         }
     }
 

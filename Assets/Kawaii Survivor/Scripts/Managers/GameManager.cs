@@ -1,13 +1,23 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
     public GameState CurrentGameState { get; private set; } // Property to store the current game state
+
+    [Header("Elements")]
+
+
+
+    [Header("Actions")]
+    public static Action onGamePaused;
+    public static Action onGameResumed;
 
     void Awake()
     {
@@ -40,11 +50,6 @@ public class GameManager : MonoBehaviour
         CurrentGameState = gameState; // Update the current game state
     }
 
-    public void ManageGameOver()
-    {
-        SceneManager.LoadScene(0); // Reload the current scene
-    }
-
     public void WaveCompletedCallBack()
     {
         if (Player.Instance.HasLevelUp() || WaveTransitionManager.Instance.HasChestCollected())
@@ -60,6 +65,32 @@ public class GameManager : MonoBehaviour
     public void StartGame() => SetGameState(GameState.GAME); // Start the game by setting the state to game
     public void StartWeaponSelection() => SetGameState(GameState.WEAPONSELECTION); // Start the game by setting the state to game
     public void OpenShop() => SetGameState(GameState.SHOP); // Open the shop by setting the state to shop
+
+    public void ManageGameOver()
+    {
+        SceneManager.LoadScene(0); // Reload the current scene
+    }
+
+    public void PauseGame()
+    {
+        Time.timeScale = 0f; // Pause the game
+
+        onGamePaused?.Invoke();
+    }
+
+    public void ResumeGame()
+    {
+        Time.timeScale = 1f; // Resume the game
+
+        onGameResumed?.Invoke();
+    }
+
+    public void RestartFromPause()
+    {
+        Time.timeScale = 1f; // Resume the game
+
+        ManageGameOver();
+    }
 }
 
 public interface IGameStateListener

@@ -2,14 +2,17 @@ using UnityEngine;
 
 public static class ResourcesManager
 {
+    [Header("Paths")]
     const string STAT_ICONS_DATA_PATH = "Data/Stat Icons";
     const string OBJECTS_DATA_PATH = "Data/Objects/";
     const string WEAPONS_DATA_PATH = "Data/Weapons/";
+    const string CHARACTERS_DATA_PATH = "Data/Characters/";
 
+    [Header("Settings")]
     private static StatIcon[] m_statIcons;
     private static ObjectDataSO[] m_objectDatas;
     private static WeaponDataSO[] m_weaponDatas;
-
+    private static CharacterDataSO[] m_characterDatas;
 
     public static Sprite GetStatIcon(Stat stat)
 
@@ -70,4 +73,19 @@ public static class ResourcesManager
     {
         return Weapons[Random.Range(0, Weapons.Length)];
     }
+
+    public static CharacterDataSO[] Characters
+    {
+        get
+        {
+            if (m_characterDatas == null)
+            {
+                m_characterDatas = Resources.LoadAll<CharacterDataSO>(CHARACTERS_DATA_PATH);
+            }
+
+            return m_characterDatas;
+        }
+        private set { }
+    }
+
 }

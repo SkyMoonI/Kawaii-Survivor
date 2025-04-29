@@ -26,7 +26,6 @@ public class ShopManagerUI : MonoBehaviour
     private Vector2 m_playerItemInfoPanelOpenPosition;
     private Vector2 m_playerItemInfoPanelClosedPosition;
 
-
     void Start()
     {
         ConfigurePlayerStatsPanel();

@@ -50,6 +50,7 @@ public class InventoryItemInfo : MonoBehaviour
            WeaponStatsCalculator.GetRecyclePrice(weapon.WeaponData, weapon.Level),
             WeaponStatsCalculator.GetStats(weapon.WeaponData, weapon.Level));
 
+
         m_mergeButton.gameObject.SetActive(true);
 
         m_mergeButton.interactable = WeaponMerger.Instance.CanMerge(weapon);

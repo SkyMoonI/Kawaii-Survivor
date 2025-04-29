@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.PlayerLoop;
 
@@ -12,6 +13,7 @@ public class Player : MonoBehaviour
     private PlayerHealth m_playerHealth;
     private CircleCollider2D m_playerCollider; // reference to the player collider
     private PlayerLevel m_playerLevel; // reference to the player level
+    [SerializeField] private SpriteRenderer m_playerSpriteRenderer;
 
     void Awake()
     {
@@ -27,6 +29,28 @@ public class Player : MonoBehaviour
         m_playerHealth = GetComponent<PlayerHealth>();
         m_playerCollider = GetComponent<CircleCollider2D>(); // get the CircleCollider2D component
         m_playerLevel = GetComponent<PlayerLevel>();
+    }
+
+    void OnEnable()
+    {
+        CharacterSelectionManager.onCharacterSelected += CharacterSelectedCallBack;
+    }
+
+
+
+    void OnDisable()
+    {
+        CharacterSelectionManager.onCharacterSelected -= CharacterSelectedCallBack;
+    }
+
+    void OnDestroy()
+    {
+        CharacterSelectionManager.onCharacterSelected -= CharacterSelectedCallBack;
+    }
+
+    private void CharacterSelectedCallBack(CharacterDataSO characterData)
+    {
+        m_playerSpriteRenderer.sprite = characterData.Sprite;
     }
 
     public void TakeDamage(float damage)

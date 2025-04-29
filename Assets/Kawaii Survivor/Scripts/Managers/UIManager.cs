@@ -7,6 +7,7 @@ public class UIManager : MonoBehaviour, IGameStateListener
 {
     [Header("Panels")]
     [SerializeField] private GameObject m_menuPanel; // Reference to the menu panel
+    [SerializeField] private GameObject m_characterSelectionPanel; // Reference to the weapon selection panel
     [SerializeField] private GameObject m_weaponSelectionPanel; // Reference to the weapon selection panel
     [SerializeField] private GameObject m_gamePanel; // Reference to the game panel
     [SerializeField] private GameObject m_pausePanel; // Reference to the game panel
@@ -26,6 +27,9 @@ public class UIManager : MonoBehaviour, IGameStateListener
     [SerializeField] private Button m_restartConfirmationPanelYesButton;
     [SerializeField] private Button m_restartConfirmationPanelNoButton;
     [SerializeField] private Button m_openMenuButton;
+    [SerializeField] private Button m_openCharacterSelectionButton;
+    [SerializeField] private Button m_closeCharacterSelectionButton;
+
 
 
     void Awake()
@@ -33,19 +37,16 @@ public class UIManager : MonoBehaviour, IGameStateListener
         m_panels.AddRange(new GameObject[]
         {
             m_menuPanel,
+            m_characterSelectionPanel,
             m_weaponSelectionPanel,
             m_gamePanel,
+            m_pausePanel,
+            m_restartConfirmationPanel,
             m_gameOverPanel,
             m_stageCompletePanel,
             m_waveTransitionPanel,
             m_shopPanel,
         }); // Add all panels to the list
-    }
-
-    void Start()
-    {
-        m_pausePanel.SetActive(false);
-        HideRestartConfirmationPanel();
     }
 
     void OnEnable()
@@ -74,6 +75,12 @@ public class UIManager : MonoBehaviour, IGameStateListener
 
         m_restartConfirmationPanelNoButton.onClick.RemoveAllListeners(); // Remove all listeners from the button
         m_restartConfirmationPanelNoButton.onClick.AddListener(HideRestartConfirmationPanel); // Add a new listener to handle button clicks
+
+        m_openCharacterSelectionButton.onClick.RemoveAllListeners(); // Remove all listeners from the button
+        m_openCharacterSelectionButton.onClick.AddListener(ShowCharacterSelectionPanel); // Add a new listener to handle button clicks
+
+        m_closeCharacterSelectionButton.onClick.RemoveAllListeners(); // Remove all listeners from the button
+        m_closeCharacterSelectionButton.onClick.AddListener(HideCharacterSelectionPanel); // Add a new listener to handle button clicks
     }
 
     void OnDisable()
@@ -85,6 +92,9 @@ public class UIManager : MonoBehaviour, IGameStateListener
         m_resumeButton.onClick.RemoveAllListeners();
         m_openRestartConfirmationPanel.onClick.RemoveAllListeners();
         m_openMenuButton.onClick.RemoveAllListeners();
+        m_openCharacterSelectionButton.onClick.RemoveAllListeners();
+        m_closeCharacterSelectionButton.onClick.RemoveAllListeners();
+
     }
 
     void OnDestroy()
@@ -96,6 +106,9 @@ public class UIManager : MonoBehaviour, IGameStateListener
         m_resumeButton.onClick.RemoveAllListeners();
         m_openRestartConfirmationPanel.onClick.RemoveAllListeners();
         m_openMenuButton.onClick.RemoveAllListeners();
+        m_openCharacterSelectionButton.onClick.RemoveAllListeners();
+        m_closeCharacterSelectionButton.onClick.RemoveAllListeners();
+
     }
 
     public void GameStateChangedCallBack(GameState gameState)
@@ -154,5 +167,15 @@ public class UIManager : MonoBehaviour, IGameStateListener
     private void HideRestartConfirmationPanel()
     {
         m_restartConfirmationPanel.SetActive(false);
+    }
+
+    private void ShowCharacterSelectionPanel()
+    {
+        m_characterSelectionPanel.SetActive(true);
+    }
+
+    private void HideCharacterSelectionPanel()
+    {
+        m_characterSelectionPanel.SetActive(false);
     }
 }

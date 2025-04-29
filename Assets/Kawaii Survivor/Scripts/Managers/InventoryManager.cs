@@ -68,7 +68,7 @@ public class InventoryManager : MonoBehaviour, IGameStateListener
             inventoryItemContainerInstance.Configure(weapons[i], i, () => ShowItemInfo(inventoryItemContainerInstance));
 
             InventoryItemContainer pauseInventoryItemContainerInstance = Instantiate(m_inventoryItemContainer, m_pauseInventoryItemsParent);
-            pauseInventoryItemContainerInstance.Configure(weapons[i], i, null);
+            pauseInventoryItemContainerInstance.Configure(weapons[i], i, () => ShowItemInfo(pauseInventoryItemContainerInstance));
         }
 
         ObjectDataSO[] objectDatas = m_playerObjects.Objects.ToArray(); // Get all object data from the player objects
@@ -79,7 +79,7 @@ public class InventoryManager : MonoBehaviour, IGameStateListener
             inventoryItemContainerInstance.Configure(objectDatas[i], () => ShowItemInfo(inventoryItemContainerInstance));
 
             InventoryItemContainer pauseInventoryItemContainerInstance = Instantiate(m_inventoryItemContainer, m_pauseInventoryItemsParent);
-            pauseInventoryItemContainerInstance.Configure(objectDatas[i], null);
+            pauseInventoryItemContainerInstance.Configure(objectDatas[i], () => ShowItemInfo(pauseInventoryItemContainerInstance));
         }
     }
 

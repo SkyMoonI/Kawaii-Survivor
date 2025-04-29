@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using System;
 
 public class PlayerStatManager : MonoBehaviour
 {
@@ -37,8 +38,22 @@ public class PlayerStatManager : MonoBehaviour
 
     void Start()
     {
-
         UpdatePlayerStats(); // Notify listeners of the initial state
+    }
+
+    void OnEnable()
+    {
+        CharacterSelectionManager.onCharacterSelected += CharacterSelectedCallBack;
+    }
+
+    void OnDisable()
+    {
+        CharacterSelectionManager.onCharacterSelected -= CharacterSelectedCallBack;
+    }
+
+    void OnDestroy()
+    {
+        CharacterSelectionManager.onCharacterSelected -= CharacterSelectedCallBack;
     }
 
     public void AddPlayerStat(Stat stat, float value)
@@ -90,6 +105,14 @@ public class PlayerStatManager : MonoBehaviour
         {
             dependency.UpdateStats(Instance); // Notify each listener of the state change
         }
+    }
+
+    private void CharacterSelectedCallBack(CharacterDataSO characterData)
+    {
+        m_characterData = characterData;
+        m_playerStats = m_characterData.BaseStats;
+
+        UpdatePlayerStats();
     }
 }
 [System.Serializable]

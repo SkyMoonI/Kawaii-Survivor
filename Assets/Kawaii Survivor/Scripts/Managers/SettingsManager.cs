@@ -35,14 +35,17 @@ public class SettingsManager : MonoBehaviour, IWantToBeSaved
     [SerializeField] private GameObject m_creditsPanel;
 
     [Header("Actions")]
-    public static Action<bool> OnSFXStateChanged;
-    public static Action<bool> OnMusicStateChanged;
+    public static Action<bool> onSFXStateChanged;
+    public static Action<bool> onMusicStateChanged;
 
 
     void Start()
     {
         UpdateSFXVisuals();
         UpdateMusicVisuals();
+
+        onSFXStateChanged?.Invoke(m_sfxState);
+        onMusicStateChanged?.Invoke(m_musicState);
     }
 
     void OnEnable()
@@ -92,7 +95,7 @@ public class SettingsManager : MonoBehaviour, IWantToBeSaved
         UpdateSFXVisuals();
         Save();
 
-        OnSFXStateChanged?.Invoke(m_sfxState);
+        onSFXStateChanged?.Invoke(m_sfxState);
     }
 
     private void UpdateSFXVisuals()
@@ -116,7 +119,7 @@ public class SettingsManager : MonoBehaviour, IWantToBeSaved
         UpdateMusicVisuals();
         Save();
 
-        OnMusicStateChanged?.Invoke(m_musicState);
+        onMusicStateChanged?.Invoke(m_musicState);
     }
 
     private void UpdateMusicVisuals()

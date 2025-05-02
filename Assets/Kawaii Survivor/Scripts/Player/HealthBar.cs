@@ -26,7 +26,7 @@ public class HealthBar : MonoBehaviour
     {
         if (m_text != null)
         {
-            m_text.text = $"{currentHealth} / {maxHealth}"; // Update the text to show current and max health
+            m_text.text = $"{(int)currentHealth} / {maxHealth}"; // Update the text to show current and max health
         }
     }
 

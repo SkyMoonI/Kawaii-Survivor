@@ -18,10 +18,14 @@ public class MeleeWeapon : Weapon
     private State m_state; // Current state of the weapon
     private Animator m_animator; // Animator component for weapon animations
 
-    void Awake()
+    new void Awake()
     {
+        base.Awake();
         m_animator = GetComponent<Animator>(); // Get the Animator component attached to the weapon
         m_hitDetectionCollider = m_hitDetectionTransform.GetComponent<BoxCollider2D>(); // Get the BoxCollider2D component attached to the hit detection transform
+
+        if (m_weaponData.AnimatorOverride != null && m_animator != null)
+            m_animator.runtimeAnimatorController = m_weaponData.AnimatorOverride;
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -51,6 +55,7 @@ public class MeleeWeapon : Weapon
     protected override void StartAttack()
     {
         m_animator.Play("Attack"); // Play the attack animation
+        PlayAttackSound(); // Play the attack sound
         m_state = State.Attack; // Set the state to Attack
         m_damagedEnemies.Clear(); // Clear the list of damaged enemies
     }

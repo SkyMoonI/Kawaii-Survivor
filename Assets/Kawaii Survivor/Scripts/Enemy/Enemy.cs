@@ -17,7 +17,7 @@ public abstract class Enemy : MonoBehaviour
     [SerializeField] protected float m_spawnIndicatorDuration = 0.3f; // duration of the spawn indicator
     [SerializeField] protected int m_spawnIndicatorLoopCount = 4; // delay of the spawn indicator
     protected bool m_hasSpawned; // flag to check if the enemy has spawned
-    [SerializeField] protected float m_playerDetectionDistance; // minimum distance to player
+    [SerializeField] protected float m_playerDetectionDistance = 2; // minimum distance to player
 
     [Header("Effects")]
     [SerializeField] protected ParticleSystem m_enemyDeathEffectPrefab; // prefab to spawn when enemy dies
@@ -37,6 +37,8 @@ public abstract class Enemy : MonoBehaviour
     protected virtual void Awake()
     {
         m_collider = GetComponent<Collider2D>(); // get the collider of the enemy
+        m_collider.enabled = false; // disable the collider until the spawn sequence is completed
+
         m_enemyMovement = GetComponent<EnemyMovement>(); // get the enemy movement script
         m_healthText = GetComponentInChildren<TMP_Text>(); // Find the health text in the scene
         m_player = FindFirstObjectByType<Player>();
@@ -51,7 +53,6 @@ public abstract class Enemy : MonoBehaviour
     {
         m_currentHealth = m_maxHealth; // Set the initial health to max health
 
-        m_collider.enabled = false; // disable the collider until the spawn sequence is completed
 
         m_enemyMovement.enabled = false; // disable the enemy movement script until the spawn sequence is completed
 

@@ -179,6 +179,7 @@ GameObject:
   - component: {fileID: 180024392546588506}
   - component: {fileID: 4262261673311150049}
   - component: {fileID: 1417052624103769516}
+  - component: {fileID: 6669967785239267417}
   m_Layer: 5
   m_Name: Character Selection Button
   m_TagString: Untagged
@@ -303,3 +304,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_characterImage: {fileID: 6736201136465049629}
   m_lockObject: {fileID: 5237339331203947967}
+--- !u!114 &6669967785239267417
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6972813662526705942}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 75298f608223283458d3b9dd9480e004, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

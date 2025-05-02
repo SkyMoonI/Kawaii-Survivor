@@ -1,12 +1,23 @@
 # ninja log v5
+1	1819	7656698491254114	GameActivity/CMakeFiles/game.dir/UGAApplication.cpp.o	1bc9fd7c6b1d952b
 51	280	7656698475873163	FramePacing/CMakeFiles/swappywrapper.dir/UnitySwappyWrapper.cpp.o	7ed31c60b5982437
 282	466	7656698477738662	D:/unity/Udemy Unity 2D Game - Kawaii Survivor/Kawaii-Survivor/Library/Bee/Android/Prj/IL2CPP/Gradle/unityLibrary/build/intermediates/cxx/RelWithDebInfo/43n202j5/obj/armeabi-v7a/libswappywrapper.so	9adf3be7078a1fed
+20	1726	7656698490340331	GameActivity/CMakeFiles/game.dir/UGAInput.cpp.o	d5483424db3bc27a
 25	1403	7656698487076170	GameActivity/CMakeFiles/game.dir/UGAInputKeyEvent.cpp.o	157bc0e7ac82311
 30	1425	7656698487304345	GameActivity/CMakeFiles/game.dir/UGAEntry.cpp.o	7842d2c8524f0f1a
-37	1466	7656698487731132	GameActivity/CMakeFiles/game.dir/UGAInputMotionEvent.cpp.o	e8aad85e6af0ae15
-10	1482	7656698487883653	GameActivity/CMakeFiles/game.dir/UGAConfiguration.cpp.o	4c0606722c6073f2
 15	1518	7656698488248791	GameActivity/CMakeFiles/game.dir/UGADebug.cpp.o	e3c2b9994c71d2da
+37	1466	7656698487731132	GameActivity/CMakeFiles/game.dir/UGAInputMotionEvent.cpp.o	e8aad85e6af0ae15
 44	1580	7656698488900155	GameActivity/CMakeFiles/game.dir/UGASoftKeyboard.cpp.o	11253b6ff36292c2
-20	1726	7656698490340331	GameActivity/CMakeFiles/game.dir/UGAInput.cpp.o	d5483424db3bc27a
-1	1819	7656698491254114	GameActivity/CMakeFiles/game.dir/UGAApplication.cpp.o	1bc9fd7c6b1d952b
+10	1482	7656698487883653	GameActivity/CMakeFiles/game.dir/UGAConfiguration.cpp.o	4c0606722c6073f2
 1820	1932	7656698492409393	D:/unity/Udemy Unity 2D Game - Kawaii Survivor/Kawaii-Survivor/Library/Bee/Android/Prj/IL2CPP/Gradle/unityLibrary/build/intermediates/cxx/RelWithDebInfo/43n202j5/obj/armeabi-v7a/libgame.so	48ba528d371a53f3
+64	413	7677906410098527	FramePacing/CMakeFiles/swappywrapper.dir/UnitySwappyWrapper.cpp.o	7ed31c60b5982437
+414	672	7677906412812814	D:/unity/Udemy Unity 2D Game - Kawaii Survivor/Kawaii-Survivor/Library/Bee/Android/Prj/IL2CPP/Gradle/unityLibrary/build/intermediates/cxx/RelWithDebInfo/43n202j5/obj/armeabi-v7a/libswappywrapper.so	9adf3be7078a1fed
+8	1644	7677906422501865	GameActivity/CMakeFiles/game.dir/UGAEntry.cpp.o	7842d2c8524f0f1a
+48	1715	7677906423196448	GameActivity/CMakeFiles/game.dir/UGAInputKeyEvent.cpp.o	157bc0e7ac82311
+33	1727	7677906423307453	GameActivity/CMakeFiles/game.dir/UGAInputMotionEvent.cpp.o	e8aad85e6af0ae15
+27	1743	7677906423509878	GameActivity/CMakeFiles/game.dir/UGADebug.cpp.o	e3c2b9994c71d2da
+14	1766	7677906423756164	GameActivity/CMakeFiles/game.dir/UGAConfiguration.cpp.o	4c0606722c6073f2
+56	1830	7677906424358812	GameActivity/CMakeFiles/game.dir/UGASoftKeyboard.cpp.o	11253b6ff36292c2
+41	2037	7677906426444189	GameActivity/CMakeFiles/game.dir/UGAInput.cpp.o	d5483424db3bc27a
+20	2110	7677906427142427	GameActivity/CMakeFiles/game.dir/UGAApplication.cpp.o	1bc9fd7c6b1d952b
+2111	2239	7677906428480295	D:/unity/Udemy Unity 2D Game - Kawaii Survivor/Kawaii-Survivor/Library/Bee/Android/Prj/IL2CPP/Gradle/unityLibrary/build/intermediates/cxx/RelWithDebInfo/43n202j5/obj/armeabi-v7a/libgame.so	48ba528d371a53f3

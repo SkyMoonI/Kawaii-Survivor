@@ -11,6 +11,8 @@ public class WeaponDataSO : ScriptableObject
     [field: SerializeField] public int PurchasePrice { get; private set; } // Character purchase price
     [field: SerializeField] public int RecyclePrice { get; private set; } // Character purchase price
     [field: SerializeField] public Weapon Prefab { get; private set; } // Character level
+    [field: SerializeField] public AudioClip AttackSound { get; private set; } // Clip for attack sound
+    [field: SerializeField] public AnimatorOverrideController AnimatorOverride { get; private set; }
 
     [HorizontalLine]
     [SerializeField] private float m_attack;

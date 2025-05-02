@@ -6,7 +6,7 @@ using UnityEngine;
 public abstract class Weapon : MonoBehaviour, IPlayerStatsDependency
 {
     [Header("Scriptable Objects")]
-    [field: SerializeField] private WeaponDataSO m_weaponData; // Reference to weapon data scriptable object 
+    [field: SerializeField] protected WeaponDataSO m_weaponData; // Reference to weapon data scriptable object 
     public WeaponDataSO WeaponData => m_weaponData;
 
     [Header("Settings")]
@@ -42,12 +42,30 @@ public abstract class Weapon : MonoBehaviour, IPlayerStatsDependency
     [SerializeField] protected int m_level; // Current level of the weapon
     public int Level => m_level;
 
+    [Header("Audio")]
+    protected AudioSource m_audioSource;
+
     [Header("DEBUG")]
     [SerializeField] protected bool m_isGizmosEnabled;
+
+    protected void Awake()
+    {
+        m_audioSource = gameObject.AddComponent<AudioSource>();
+        m_audioSource.playOnAwake = false;
+        m_audioSource.clip = m_weaponData.AttackSound;
+    }
 
     protected void Update()
     {
         CleanAim();
+    }
+
+    protected void PlayAttackSound()
+    {
+        if (AudioManager.Instance.IsSFXOn == false) return;
+
+        m_audioSource.pitch = UnityEngine.Random.Range(0.9f, 1.1f);
+        m_audioSource.Play();
     }
 
     private void CleanAim()
@@ -63,14 +81,14 @@ public abstract class Weapon : MonoBehaviour, IPlayerStatsDependency
         {
             Vector2 defaultPosition = Vector3.up;
             m_targetUpVector = defaultPosition; // Set the target up vector to the default position
-            // transform.up = Vector3.Lerp(transform.up, targetUpVector, m_aimLerp * Time.deltaTime); // Set the weapon's up direction to the world up direction
+            //transform.up = Vector3.Lerp(transform.up, m_targetUpVector, m_aimLerp * Time.deltaTime); // Set the weapon's up direction to the world up direction
         }
         else
         {
             Vector2 directionToEnemy = (closestEnemy.transform.position - transform.position).normalized;
             m_targetUpVector = directionToEnemy; // Calculate the direction to the closest enemy
-            // transform.up = targetUpVector; // Set the weapon's up direction to the direction of the closest enemy directly
-            // transform.up = Vector3.Lerp(transform.up, targetUpVector, m_aimLerp * Time.deltaTime); // Smoothly rotate the weapon towards the closest enemy
+                                                 // transform.up = targetUpVector; // Set the weapon's up direction to the direction of the closest enemy directly
+                                                 //transform.up = Vector3.Lerp(transform.up, m_targetUpVector, m_aimLerp * Time.deltaTime); // Smoothly rotate the weapon towards the closest enemy
             ManageAttack();
         }
 
@@ -111,6 +129,7 @@ public abstract class Weapon : MonoBehaviour, IPlayerStatsDependency
     {
         if (m_attackTimer >= m_attackDelay)
         {
+            Debug.Log("Attack");
             StartAttack();
             m_attackTimer = 0f; // Reset the attack timer
         }
@@ -133,17 +152,6 @@ public abstract class Weapon : MonoBehaviour, IPlayerStatsDependency
 
         // If not a critical hit, return normal damage
         return m_currentDamage;
-    }
-
-    protected virtual void OnDrawGizmos()
-    {
-        if (m_isGizmosEnabled == false)
-        {
-            return;
-        }
-
-        Gizmos.color = Color.blue; // Set the color of the Gizmos to red
-        Gizmos.DrawWireSphere(transform.position, m_enemyDetectionRange); // Draw a wire sphere at the enemy's position with the detection distance);
     }
 
     private void ConfigureStats()
@@ -192,5 +200,16 @@ public abstract class Weapon : MonoBehaviour, IPlayerStatsDependency
     {
         m_level = level; // Set the weapon level to the specified level
         UpdateStats(PlayerStatManager.Instance); // Update the stats based on the new level
+    }
+
+    protected virtual void OnDrawGizmos()
+    {
+        if (m_isGizmosEnabled == false)
+        {
+            return;
+        }
+
+        Gizmos.color = Color.blue; // Set the color of the Gizmos to red
+        Gizmos.DrawWireSphere(transform.position, m_enemyDetectionRange); // Draw a wire sphere at the enemy's position with the detection distance);
     }
 }

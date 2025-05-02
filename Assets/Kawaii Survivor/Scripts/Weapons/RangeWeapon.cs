@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.Pool;
 
@@ -14,11 +15,14 @@ public class RangeWeapon : Weapon
     [Header("Pooling")]
     private ObjectPool<RangeWeaponBullet> m_rangeWeaponBulletPool; // pool to store the damage text prefabs
 
+    public static Action onBulletShot;
+
     [Header("DEBUG")]
     private Vector2 m_gizmosAttackDirection;
 
-    void Awake()
+    new void Awake()
     {
+        base.Awake(); // Call the base class Awake method
         m_rangeWeaponBulletPool = new ObjectPool<RangeWeaponBullet>(CreateBullet, OnGetBullet, OnReleaseBullet, OnDestroyBullet, false, 10);
         m_bulletObjectHolder = GameObject.Find("Player Bullet Object Holder"); // find the bullet object holder in the scene
     }
@@ -74,6 +78,10 @@ public class RangeWeapon : Weapon
         float damage = GetDamage(out bool isCriticalHit); // Get the damage value from the weapon
 
         bulletInstance.Shoot(damage, m_bulletSpeed, directionToEnemy, isCriticalHit); // shoot the bullet with the specified damage and speed
+
+        PlayAttackSound();
+
+        onBulletShot?.Invoke();
     }
 
     protected override void OnDrawGizmos()

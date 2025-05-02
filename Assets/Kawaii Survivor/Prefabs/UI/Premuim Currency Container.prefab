@@ -416,6 +416,7 @@ GameObject:
   - component: {fileID: 1159940375056749410}
   - component: {fileID: 1610401018672862460}
   - component: {fileID: 6944207914380736548}
+  - component: {fileID: 6530779628706029755}
   m_Layer: 5
   m_Name: Premuim Currency Container
   m_TagString: Untagged
@@ -430,7 +431,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9137503753255809295}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -482,3 +483,15 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &6530779628706029755
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9137503753255809295}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e7cc2008c7dab444bb1fc15b8d2f43fc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

@@ -57,7 +57,7 @@ public class WaveManager : MonoBehaviour, IGameStateListener
         m_localCounters.Clear(); // Clear the local counters for the new wave
         foreach (WaveSegment segment in m_waves[waveIndex].segments)
         {
-            m_localCounters.Add(1f); // Initialize the local counters for each segment
+            m_localCounters.Add(0f); // Initialize the local counters for each segment
         }
 
         m_timer = 0f;
@@ -91,6 +91,12 @@ public class WaveManager : MonoBehaviour, IGameStateListener
                 enemy.gameObject.SetActive(true); // Activate the enemy game object
 
                 m_localCounters[i]++; // Increment the local counter for this segment
+
+                // for spawn once (boss)
+                if (segment.spawnOnce)
+                {
+                    m_localCounters[i] = Mathf.Infinity;
+                }
             }
         }
 
@@ -138,8 +144,8 @@ public class WaveManager : MonoBehaviour, IGameStateListener
 
         // Clamp the target position to ensure it stays within the bounds of the game area
         // Adjust these values based on your game area size
-        targetPosition.x = Mathf.Clamp(targetPosition.x, -18f, 18f); // Clamp the x position
-        targetPosition.y = Mathf.Clamp(targetPosition.y, -8f, 8f); // Clamp the y position
+        targetPosition.x = Mathf.Clamp(targetPosition.x, -Constants.arenaSize.x / 2f, Constants.arenaSize.x / 2f); // Clamp the x position
+        targetPosition.y = Mathf.Clamp(targetPosition.y, -Constants.arenaSize.y / 2f, Constants.arenaSize.y / 2f); // Clamp the y position
 
         return targetPosition; // Placeholder for spawn position logic
     }
@@ -177,4 +183,5 @@ public struct WaveSegment
     public Enemy enemyPrefab;
     [MinMaxSlider(0f, 100f)] public Vector2 timeStartEnd; // tweak the value to set the time when the enemy will spawn and when it will end
     public int spawnFrequency; // how many enemies will spawn in a second
+    public bool spawnOnce;
 }

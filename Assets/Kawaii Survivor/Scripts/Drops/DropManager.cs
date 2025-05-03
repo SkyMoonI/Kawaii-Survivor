@@ -16,6 +16,7 @@ public class DropManager : MonoBehaviour
     void OnEnable()
     {
         Enemy.onEnemyDeath += EnemyPassAwayCallBack; // Subscribe to the enemy death event
+        Enemy.onBossDeath += BossPassAwayCallBack;
         Candy.onCollected += ReleaseCandy; // Subscribe to the candy collected event
         Cash.onCollected += ReleaseCash; // Subscribe to the cash collected event
         Chest.onCollected += ReleaseChest; // Subscribe to the chest collected event
@@ -24,6 +25,7 @@ public class DropManager : MonoBehaviour
     void OnDisable()
     {
         Enemy.onEnemyDeath -= EnemyPassAwayCallBack; // Unsubscribe from the enemy death event
+        Enemy.onBossDeath -= BossPassAwayCallBack;
         Candy.onCollected -= ReleaseCandy; // Unsubscribe from the candy collected event
         Cash.onCollected -= ReleaseCash; // Unsubscribe from the cash collected event
         Chest.onCollected -= ReleaseChest; // Unsubscribe from the chest collected event
@@ -32,6 +34,7 @@ public class DropManager : MonoBehaviour
     void OnDestroy()
     {
         Enemy.onEnemyDeath -= EnemyPassAwayCallBack; // Unsubscribe from the enemy death event
+        Enemy.onBossDeath -= BossPassAwayCallBack;
         Candy.onCollected -= ReleaseCandy; // Unsubscribe from the candy collected event
         Cash.onCollected -= ReleaseCash; // Unsubscribe from the cash collected event
         Chest.onCollected -= ReleaseChest; // Unsubscribe from the chest collected event
@@ -79,6 +82,11 @@ public class DropManager : MonoBehaviour
         TrySpawnChest(enemyPosition); // Try to spawn a chest at the enemy position
     }
 
+    private void BossPassAwayCallBack(Vector2 bossPosition)
+    {
+        DropChest(bossPosition); // spawn a chest at the boss position
+    }
+
     private void TrySpawnChest(Vector2 enemyPosition)
     {
         bool shouldSpawnChest = Random.Range(0f, 100f) <= m_chestSpawnChance; // Randomly decide whether to spawn cash or candy based on the spawn chance
@@ -86,6 +94,11 @@ public class DropManager : MonoBehaviour
         if (!shouldSpawnChest) // If the chest should not be spawned, return
             return; // Exit the method
 
+        DropChest(enemyPosition);
+    }
+
+    private void DropChest(Vector2 enemyPosition)
+    {
         Chest chest = m_chestPool.Get(); // Get a chest instance from the pool
         chest.transform.position = enemyPosition; // Set the position of the chest to the enemy position
     }

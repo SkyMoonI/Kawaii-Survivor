@@ -129,7 +129,6 @@ public abstract class Weapon : MonoBehaviour, IPlayerStatsDependency
     {
         if (m_attackTimer >= m_attackDelay)
         {
-            Debug.Log("Attack");
             StartAttack();
             m_attackTimer = 0f; // Reset the attack timer
         }

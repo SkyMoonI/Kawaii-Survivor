@@ -9,6 +9,7 @@ public class EnemyBullet : MonoBehaviour
 
     [Header("Settings")]
     private float m_damage; // speed of the bullet
+    [SerializeField] private float m_angularSpeed;
 
     void Awake()
     {
@@ -40,14 +41,22 @@ public class EnemyBullet : MonoBehaviour
 
         m_damage = damage; // set the bullet damage
 
+        // fixing last bullet rotation issue
+        if (Mathf.Abs(direction.x + 1) < .01f)
+        {
+            direction.y += .01f;
+        }
+
         transform.right = direction; // set the bullet's rotation to face the player
 
         m_rigidBody.linearVelocity = direction * speed; // set the bullet velocity
+        m_rigidBody.angularVelocity = m_angularSpeed;
     }
 
     public void Reload(Vector2 bulletSpawnPoint)
     {
         transform.position = bulletSpawnPoint; // set the bullet position to the spawn point
         m_rigidBody.linearVelocity = Vector2.zero; // reset the bullet velocity
+        m_rigidBody.angularVelocity = 0f;
     }
 }

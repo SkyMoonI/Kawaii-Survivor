@@ -99,6 +99,13 @@ public class RangeEnemyAttack : MonoBehaviour
         m_attackTimer += Time.deltaTime; // increase the attack delay
     }
 
+    public void InstantShoot(Vector2 direction)
+    {
+        EnemyBullet bulletInstance = m_enemyBulletPool.Get(); // instantiate the bullet prefab
+
+        bulletInstance.Shoot(m_attackDamage, m_bulletSpeed, direction); // shoot the bullet with the specified damage and speed
+    }
+
     void OnDrawGizmos()
     {
         if (m_isGizmosEnabled == false)

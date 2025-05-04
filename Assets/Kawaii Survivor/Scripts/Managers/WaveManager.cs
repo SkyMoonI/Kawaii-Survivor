@@ -142,10 +142,13 @@ public class WaveManager : MonoBehaviour, IGameStateListener
         Vector2 offset = direction.normalized * Random.Range(6f, 10f); // Random distance from the player
         Vector2 targetPosition = (Vector2)m_player.transform.position + offset; // Calculate the target position
 
-        // Clamp the target position to ensure it stays within the bounds of the game area
-        // Adjust these values based on your game area size
-        targetPosition.x = Mathf.Clamp(targetPosition.x, -Constants.arenaSize.x / 2f, Constants.arenaSize.x / 2f); // Clamp the x position
-        targetPosition.y = Mathf.Clamp(targetPosition.y, -Constants.arenaSize.y / 2f, Constants.arenaSize.y / 2f); // Clamp the y position
+        if (!GameManager.Instance.IsUsingInfiniteMap)
+        {
+            // Clamp the target position to ensure it stays within the bounds of the game area
+            // Adjust these values based on your game area size
+            targetPosition.x = Mathf.Clamp(targetPosition.x, -Constants.arenaSize.x / 2f, Constants.arenaSize.x / 2f); // Clamp the x position
+            targetPosition.y = Mathf.Clamp(targetPosition.y, -Constants.arenaSize.y / 2f, Constants.arenaSize.y / 2f); // Clamp the y position
+        }
 
         return targetPosition; // Placeholder for spawn position logic
     }

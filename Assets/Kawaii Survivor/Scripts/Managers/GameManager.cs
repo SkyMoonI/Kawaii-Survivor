@@ -12,7 +12,7 @@ public class GameManager : MonoBehaviour
     public GameState CurrentGameState { get; private set; } // Property to store the current game state
 
     [Header("Elements")]
-
+    [field: SerializeField] public bool IsUsingInfiniteMap { get; private set; }
 
 
     [Header("Actions")]
